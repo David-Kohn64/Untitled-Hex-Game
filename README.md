@@ -1,2 +1,2 @@
-# hex-game
+# Unititled Hex Game
 Unity puzzle game
