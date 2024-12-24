@@ -64,7 +64,7 @@ public class HexScript : MonoBehaviour
     {
         if (checkIfAdjacentHexToPlayer()){
             TriangleScript.Instance.Move(transform.position);
-            HexManagerScript.Instance.processStep();
+            HexManagerScript.Instance.processPassiveStep();
             activate();
             transform.localScale = originalScale;
             mouseIsOn = false;
@@ -75,6 +75,9 @@ public class HexScript : MonoBehaviour
     void activate(){
         if (spriteRenderer.color == MapMakerScript.blue){
             ccfalling = true;
+        }
+        if (spriteRenderer.color == MapMakerScript.black){
+            HexManagerScript.Instance.processActiveStep(MapMakerScript.black);
         }
     }    
     

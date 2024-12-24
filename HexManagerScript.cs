@@ -24,15 +24,26 @@ public class HexManagerScript : MonoBehaviour
     {
         
     }
-   public void addHex(float xPos, float yPos, GameObject hex){
+    public void addHex(float xPos, float yPos, GameObject hex){
         int x = (int)Mathf.Round(xPos / MapMakerScript.xUnit);
         int y = (int)Mathf.Round(yPos / MapMakerScript.yUnit);
         allHexes.Add((x, y), hex);
         //Debug.Log(x + ", " + y + " Added to allHexes");
     }
-    public void processStep(){
+    public void DestroyAllHexes(){
+        foreach (var hex in allHexes){
+            Destroy(hex.Value);
+        }
+        allHexes.Clear();
+    }
+    public void processPassiveStep(){ //Lingering effects of tiles previously activated
         ChainCollapseHandler();
             //will add more handlers for each color
+    }
+    public void processActiveStep(Color color){ //Effects of tiles currently pressed on
+        if (color.Equals(MapMakerScript.black)){
+            WinLevelHandler();
+        }
     }
     void ChainCollapseHandler(){
 
@@ -80,4 +91,8 @@ public class HexManagerScript : MonoBehaviour
             hexScript.ccfalling = true; 
         }
     }
+    void WinLevelHandler(){
+        DestroyAllHexes();
+    }
+
 }

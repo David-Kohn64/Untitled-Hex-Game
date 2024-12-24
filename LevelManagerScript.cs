@@ -7,6 +7,10 @@ public class LevelManagerScript : MonoBehaviour
     public static LevelManagerScript Instance {get; private set;}
     public int currentLevel = 1; //Maybe make 0 if responsible for main menu?
 
+    void Awake()
+    {
+        Instance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {

@@ -26,7 +26,7 @@ public class MapMakerScript : MonoBehaviour
 
     void Awake()
     {
-
+        Instance = this;
     }
    
     void Start()
