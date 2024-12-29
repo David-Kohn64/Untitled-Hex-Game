@@ -71,3 +71,11 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+.plastic/
+
+# TextMeshPro generated files to ignore
+[Tt]extMeshPro/Resources/*
+[Tt]extMeshPro/Fonts/*
+[Tt]extMeshPro/Materials/*
+[Tt]extMeshPro/ImportSettings/*
