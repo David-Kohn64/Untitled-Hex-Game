@@ -8,9 +8,22 @@ public class HexScript : MonoBehaviour
     private float hoverTime = 0f;
     private Vector3 originalScale;
     private SpriteRenderer spriteRenderer; 
+
+    public bool thisHexIsOn = true;
+    // public Sprite hexOn;
+    // public Sprite hexOff;
     void Awake()
     {
-       spriteRenderer = GetComponent<SpriteRenderer>(); 
+        spriteRenderer = GetComponent<SpriteRenderer>(); 
+        // if (MapMakerScript.Instance.isHexOn == true)
+        // {
+        //     spriteRenderer.sprite = hexOn;
+        // }
+        // else
+        // {
+        //     spriteRenderer.sprite = hexOff;
+        //     MapMakerScript.Instance.isHexOn = true;
+        // }
     }
     public void ColorizeHex(Color color) 
     {
@@ -25,7 +38,7 @@ public class HexScript : MonoBehaviour
     void Update()
     {
 
-        if(mouseIsOn){
+        if(mouseIsOn ){
             hoverTime += Time.deltaTime * 2f;
             float scaleModifier = 1.0714f + Mathf.Abs(Mathf.Sin(270+hoverTime) /14f);
             transform.localScale = originalScale * scaleModifier;
@@ -77,7 +90,13 @@ public class HexScript : MonoBehaviour
             ccfalling = true;
         }
         if (spriteRenderer.color == MapMakerScript.black){
-            HexManagerScript.Instance.processActiveStep(MapMakerScript.black);
+            HexManagerScript.Instance.processActiveStep(gameObject, MapMakerScript.black);
+        }
+        if (spriteRenderer.color == MapMakerScript.green){
+            HexManagerScript.Instance.processActiveStep(gameObject, MapMakerScript.green);
+        }
+        if (spriteRenderer.color == MapMakerScript.orange){
+            HexManagerScript.Instance.processActiveStep(gameObject, MapMakerScript.orange);
         }
     }    
     

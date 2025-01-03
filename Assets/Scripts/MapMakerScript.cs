@@ -6,6 +6,8 @@ public class MapMakerScript : MonoBehaviour
 {
     public static MapMakerScript Instance { get; private set; }
     [SerializeField] public GameObject hex;
+
+    [SerializeField] public GameObject hexOff;
     [SerializeField] public GameObject triangle;
     
     public int mapComplexity = 3;  //Should be set by levelManager and not right now
@@ -20,10 +22,15 @@ public class MapMakerScript : MonoBehaviour
     private float originYPosition;
 
     public bool thereIsAPlayer = false;
+
+    public bool isHexOn = true;
+
+    public int amountKeysLeft = 0;
     public static Color red = new Color(161f/255f, 28f/255f, 15f/255f); 
     public static Color green = new Color(0.0f/255f, 107f/255f, 61f/255f); 
     public static Color blue = new Color(0f/255f, 117f/255f, 218f/255f); 
-    public static Color yellow = new Color(253f/255f, 204f/255f, 12f/255f);
+    public static Color yellow = new Color(253f/255f, 224f/255f, 12f/255f);
+    public static Color orange = new Color(255f/255f, 176f/255f, 0f/255f);
     public static Color black = new Color(100f/255f, 100f/255f, 100f/255f);
 
     void Awake()
@@ -82,14 +89,30 @@ public class MapMakerScript : MonoBehaviour
     private void createHex(float xPos, float yPos){
         xTilePos = mapComplexity + (xPos / xUnit);
         yTilePos = (mapComplexity * 2) - (yPos / yUnit);
+
+        
         Color color = determineColor(currentLevel, xTilePos, yTilePos);
 
         if (color != Color.black){
             GameObject hexInstance = Instantiate(hex, new Vector3(xPos, yPos, 0), transform.rotation);
             HexScript hexScript = hexInstance.GetComponent<HexScript>();
             hexScript.ColorizeHex(color);
-        
-            HexManagerScript.Instance.addHex(xPos, yPos, hexInstance);
+
+            if (color == yellow){
+                GameObject hexOffInstance = Instantiate(hexOff, new Vector3(xPos, yPos, 0), transform.rotation);
+                HexManagerScript.Instance.addHex(xPos, yPos, hexOffInstance, HexManagerScript.Instance.onOffHexes);
+                if (isHexOn == false){
+                    isHexOn = true;
+                    hexInstance.SetActive(false);
+                    hexScript.thisHexIsOn = false;
+                }  
+            }
+
+            if (color == green){
+                amountKeysLeft++;
+            }
+
+            HexManagerScript.Instance.addHex(xPos, yPos, hexInstance, HexManagerScript.Instance.allHexes);
         }
     }
     private void createTriangle(float xPos, float yPos){
@@ -100,30 +123,8 @@ public class MapMakerScript : MonoBehaviour
         switch (Level)
         {
             case 1:
-            Color[] colorsUsedLevel1 = new Color[]{
-                Color.white, blue, black
-            };
 
-            (int, int)[] whiteTilesLevel1 = new (int, int)[]{
-                (0,3), (0,5), (0,9), (1,2), (1,6), (2,5), 
-                (2,9), (2,11), (3,2), (3,4), (3,6), (3,8), 
-                (3,10), (3,12), (4,1), (4,5), (5,2), (5,4),
-                (5,8), (5,10), (6,3), (6,7)
-            };
-
-            (int, int)[] blueTilesLevel1 = new (int, int)[] {
-                (2, 3), (2, 1), (3, 0), (1, 4), (0, 7),
-                (1, 8), (2, 7), (1, 10), (6, 5), (5, 6),
-                (4, 7), (4, 9), (4, 11), (4, 3)
-            };
-            (int, int)[] endTilesLevel1 = new (int, int)[]{
-                (6,9)
-            };
-            (int, int)[][] allColors1 = new (int, int)[][]{
-                whiteTilesLevel1, blueTilesLevel1, endTilesLevel1
-            };
-
-            return getColorFromLists(colorsUsedLevel1, allColors1);
+            return getColorFromLists(LevelData.Instance.colorsUsedLevel1, LevelData.Instance.allColorsLevel1, LevelData.Instance.yellowTilesOffLevel1);
 
             case 2:
                 return Color.white; 
@@ -137,7 +138,7 @@ public class MapMakerScript : MonoBehaviour
                 
         }
     }
-    private Color getColorFromLists(Color[] colorsUsed, (int, int)[][] allColors){
+    private Color getColorFromLists(Color[] colorsUsed, (int, int)[][] allColors, (int, int)[] yellowTilesOff){
         const float tolerance = 0.01f;
         for (int j = 0; j < allColors.Length; j++)
         {
@@ -145,6 +146,10 @@ public class MapMakerScript : MonoBehaviour
             {
                 (int a, int b) = allColors[j][k];
                 if (Mathf.Abs(a - xTilePos) < tolerance && Mathf.Abs(b - yTilePos) < tolerance){
+
+                    if (colorsUsed[j] == yellow && allColors[j] == yellowTilesOff){ //for yellow On/Off tiles
+                        isHexOn = false;
+                    }
                     return colorsUsed[j];
                 }
             }
