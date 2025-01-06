@@ -8,7 +8,7 @@ public class MapMakerScript : MonoBehaviour
     [SerializeField] public GameObject hex;
 
     [SerializeField] public GameObject hexOff;
-    [SerializeField] public GameObject triangle;
+    [SerializeField] public GameObject player;
     
     public int mapComplexity = 3;  //Should be set by levelManager and not right now
     public int currentLevel = 1; //Should be set by levelManager and not now
@@ -53,11 +53,11 @@ public class MapMakerScript : MonoBehaviour
         originXPosition = -1 * xUnit * mapComplexity; //Coordinate of where origin should be
         originYPosition = yUnit * mapComplexity; //Coordinate of where origin should be
         if (thereIsAPlayer == false){
-            createTriangle(originXPosition, originYPosition);
+            createPlayer(originXPosition, originYPosition);
             thereIsAPlayer = true;
         }
         else {
-            TriangleScript.Instance.Move(originXPosition, originYPosition);
+            PlayerScript.Instance.Move(originXPosition, originYPosition);
         }
         float xPosition = originXPosition;
         float yPosition = originYPosition;
@@ -115,8 +115,8 @@ public class MapMakerScript : MonoBehaviour
             HexManagerScript.Instance.addHex(xPos, yPos, hexInstance, HexManagerScript.Instance.allHexes);
         }
     }
-    private void createTriangle(float xPos, float yPos){
-        Instantiate(triangle, new Vector3(xPos, yPos, -1), transform.rotation);
+    private void createPlayer(float xPos, float yPos){
+        Instantiate(player, new Vector3(xPos, yPos, -1), transform.rotation);
     }
 
     private Color determineColor(int Level, float xTilePos, float yTilePos){

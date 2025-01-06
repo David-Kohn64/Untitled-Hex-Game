@@ -47,9 +47,13 @@ public class HexScript : MonoBehaviour
     }
 
     private float zPos; 
+    private int hexRelationForPlayerFacing;
     private void OnMouseEnter()
     {
         if (checkIfAdjacentHexToPlayer()){
+            hexRelationForPlayerFacing = getPlayerFaceDirection(); //for ship facing/rotation, hexes labeled 1-6 counter-clockwise
+            PlayerScript.Instance.playerFacing = hexRelationForPlayerFacing;
+            
             zPos = transform.position.z; //Only needs to be called once but I put it here for organization but technically not optimal
             Vector3 newZ = transform.position;
             newZ.z = -2f;
@@ -76,7 +80,7 @@ public class HexScript : MonoBehaviour
     private void OnMouseDown()
     {
         if (checkIfAdjacentHexToPlayer()){
-            TriangleScript.Instance.Move(transform.position.x, transform.position.y);
+            PlayerScript.Instance.Move(transform.position.x, transform.position.y);
             HexManagerScript.Instance.processPassiveStep();
             activate();
             transform.localScale = originalScale;
@@ -101,13 +105,25 @@ public class HexScript : MonoBehaviour
     }    
     
     private bool checkIfAdjacentHexToPlayer(){
-        if (Mathf.Abs(transform.position.x - TriangleScript.Instance.transform.position.x) < MapMakerScript.xUnit + 0.1f && Mathf.Abs(transform.position.y - TriangleScript.Instance.transform.position.y) < 2* MapMakerScript.yUnit + 0.1f)
+        if (Mathf.Abs(transform.position.x - PlayerScript.Instance.transform.position.x) < MapMakerScript.xUnit + 0.1f && Mathf.Abs(transform.position.y - PlayerScript.Instance.transform.position.y) < 2* MapMakerScript.yUnit + 0.1f)
             {
-                if (!(Mathf.Abs(transform.position.x - TriangleScript.Instance.transform.position.x) < 0.001 && Mathf.Abs(transform.position.y - TriangleScript.Instance.transform.position.y) < 0.001))
+                if (!(Mathf.Abs(transform.position.x - PlayerScript.Instance.transform.position.x) < 0.001 && Mathf.Abs(transform.position.y - PlayerScript.Instance.transform.position.y) < 0.001))
                 {
                     return true;
                 }
             }
         return false;
+    }
+    public int getPlayerFaceDirection(){
+        if (Mathf.Abs(PlayerScript.Instance.transform.position.x - transform.position.x) < 0.1f){
+            return PlayerScript.Instance.transform.position.y - transform.position.y < 0.1f ? 1 : 4;
+        }
+        else if (PlayerScript.Instance.transform.position.x - transform.position.x < 0.1f){
+            return PlayerScript.Instance.transform.position.y - transform.position.y < 0.1f ? 6 : 5;
+        }
+        else {
+            return PlayerScript.Instance.transform.position.y - transform.position.y < 0.1f ? 2 : 3;
+        }
+        
     }
 }

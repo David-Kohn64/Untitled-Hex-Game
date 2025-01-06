@@ -1,8 +1,6 @@
 # Untitled Hex Game
 Unity puzzle game
 
-notes: 
-"triangle" to be replaced with "player"
 
             3,0
         2,1     4,1
