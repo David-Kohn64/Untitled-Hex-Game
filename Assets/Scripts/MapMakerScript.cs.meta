@@ -5,7 +5,8 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - hex: {fileID: 5180184625225612150, guid: b743af8eec9edc94abab36b0ed1faf6e, type: 3}
-  - triangle: {fileID: 6995204056459047480, guid: b9acac0661e695c40b4a38f5a2d7640e, type: 3}
+  - hexOff: {fileID: 9029079872275946434, guid: f1d1d57b4f58ddf498cfb32c130b5d02, type: 3}
+  - player: {fileID: 6995204056459047480, guid: b9acac0661e695c40b4a38f5a2d7640e, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

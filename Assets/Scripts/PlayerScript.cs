@@ -6,7 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
    public static PlayerScript Instance { get; private set; }
 
-   public int playerFacing = 1;
+   public int playerFacing = 0;
 
     private void Awake()
     {
@@ -21,31 +21,9 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (playerFacing){
-            case 1:
-                transform.rotation = Quaternion.identity;
-                break;
-            case 2:
-                transform.rotation = Quaternion.identity;
-                transform.Rotate(new Vector3(0, 0, 60));
-                break;
-            case 3:
-                transform.rotation = Quaternion.identity;
-                transform.Rotate(new Vector3(0, 0, 120));
-                break;
-            case 4:
-                transform.rotation = Quaternion.identity;
-                transform.Rotate(new Vector3(0, 0, 180));
-                break;
-            case 5:
-                transform.rotation = Quaternion.identity;
-                transform.Rotate(new Vector3(0, 0, 240));
-                break;
-            case 6:
-                transform.rotation = Quaternion.identity;
-                transform.Rotate(new Vector3(0, 0, 300));
-                break;
-        }
+        transform.rotation = Quaternion.identity;
+        transform.Rotate(new Vector3(0, 0, playerFacing));
+
     }
     private void OnMouseEnter()
     {
@@ -55,9 +33,18 @@ public class PlayerScript : MonoBehaviour
     {
         
     }
-    public void Move(float newX, float newY) 
+    public void Move(float newX, float newY)
     {
         transform.position = new Vector3(newX, newY, transform.position.z);
+    }
+    public void Move((int x, int y) newXY)
+    {
+        transform.position = new Vector3(MapMakerScript.Instance.ToUnityPosition(newXY.x, "x"), MapMakerScript.Instance.ToUnityPosition(newXY.y, "y"), transform.position.z);
+    }
+    public void Fell()
+    {
+        transform.position = new Vector3(-20, 0, transform.position.z); //Go far away instead of destroying
+        Debug.Log("FELL");
     }
 
 }

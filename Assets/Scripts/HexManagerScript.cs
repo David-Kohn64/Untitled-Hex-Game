@@ -5,13 +5,18 @@ using UnityEngine;
 public class HexManagerScript : MonoBehaviour
 {
     public static HexManagerScript Instance { get; private set; }
-
     public Dictionary<(int x, int y), GameObject> allHexes = new Dictionary<(int x, int y), GameObject>(); //assigns every hex to its coordinates
-
     public Dictionary<(int x, int y), GameObject> onOffHexes = new Dictionary<(int x, int y), GameObject>(); //dotted On/Off hex objects
-    (int x, int y)[] neighborOffsets = { (-1, -1), (-1, 1), (0, -2), (0, 2), (1, -1), (1, 1)}; 
-
-
+    (int x, int y)[] neighborOffsets = { (-1, -1), (-1, 1), (0, -2), (0, 2), (1, -1), (1, 1)};
+    public (int x, int y) currHex;
+    public Color currHexColor;
+    public (int x, int y) prevHex;
+    public Color prevHexColor;
+    public (int x, int y) hoverHex;
+    public Color hoverHexColor;
+    public (int x, int y) clickedHex;
+    public Color clickedHexColor;
+    public GameObject delayedActivateHex = null;
 
     void Awake()
     {
@@ -28,13 +33,7 @@ public class HexManagerScript : MonoBehaviour
     {
         
     }
-    public void addHex(float xPos, float yPos, GameObject hex, Dictionary<(int, int), GameObject> hexDictionary){
-        int x = (int)Mathf.Round(xPos / MapMakerScript.xUnit);
-        int y = (int)Mathf.Round(yPos / MapMakerScript.yUnit);
-        hexDictionary.Add((x, y), hex);
-        //Debug.Log(x + ", " + y + " Added to allHexes");
-    }
-    public void DestroyAllHexes(){
+    public void DestroyAllHexes(){ //probably wipe variables too? (currHex etc.)
         foreach (var hex in allHexes){
             Destroy(hex.Value);
         }
@@ -45,19 +44,20 @@ public class HexManagerScript : MonoBehaviour
         }
         onOffHexes.Clear();
     }
-    public void processPassiveStep(){ //Lingering effects of tiles previously activated
+    public void ProcessPassiveStep()
+    { //Lingering effects of tiles previously activated
         ChainCollapseHandler();
-            //will add more handlers for each color
+        OnOffButtonHandler();
     }
-    public void processActiveStep(GameObject hex, Color color){ //Effects of tiles currently pressed on
-        if (color.Equals(MapMakerScript.black)){
-            WinLevelHandler();
-        }
+    public void ProcessActiveStep(GameObject hex, Color color){ //Effects of tiles currently pressed on
         if (color.Equals(MapMakerScript.green)){
             KeyHexCollectHandler(hex, MapMakerScript.green);
         }
-        if (color.Equals(MapMakerScript.orange)){
-            OnOffButtonHandler();
+        if (color.Equals(MapMakerScript.pink)){
+            TravelOnOffHandler();
+        }
+        if (color.Equals(MapMakerScript.red)){
+            EchoHandler();
         }
     }
     void ChainCollapseHandler(){
@@ -112,31 +112,87 @@ public class HexManagerScript : MonoBehaviour
         SpriteRenderer spriteRenderer = hex.GetComponent<SpriteRenderer>(); 
         spriteRenderer.color = Color.white;
         MapMakerScript.Instance.amountKeysLeft--;
-
-    }
-    void OnOffButtonHandler(){
-        foreach (var hex in allHexes){
-            GameObject current = hex.Value;
-            SpriteRenderer spriteRenderer = current.GetComponent<SpriteRenderer>();
-            HexScript hexScript = current.GetComponent<HexScript>();
-
-            if (spriteRenderer.color == MapMakerScript.yellow && current.activeSelf){
-                current.SetActive(false);
-                hexScript.thisHexIsOn = false;
-            }
-            else if (spriteRenderer.color == MapMakerScript.yellow && !current.activeSelf){
-                current.SetActive(true);
-                hexScript.thisHexIsOn = true;
-            }  
-        }
-    }
-    void WinLevelHandler(){
         if (MapMakerScript.Instance.amountKeysLeft == 0){ //If all key hexes are collected
-            DestroyAllHexes();
-            LevelManagerScript.Instance.currentLevel++;
-            LevelManagerScript.Instance.setLevel(LevelManagerScript.Instance.currentLevel);
+            WinLevelHandler();
         }
+    }
+    public bool onOnOff = false;
+    void OnOffButtonHandler(){
+        if (currHexColor != MapMakerScript.yellow && onOnOff == true)
+        {
+            onOnOff = false;
+            foreach (var hex in allHexes)
+            {
+                GameObject current = hex.Value;
+                SpriteRenderer spriteRenderer = current.GetComponent<SpriteRenderer>();
+                HexScript hexScript = current.GetComponent<HexScript>();
+
+                if (spriteRenderer.color == MapMakerScript.yellow && current.activeSelf)
+                {
+                    current.SetActive(false);
+                    hexScript.thisHexIsOn = false;
+                }
+                else if (spriteRenderer.color == MapMakerScript.yellow && !current.activeSelf)
+                {
+                    current.SetActive(true);
+                    hexScript.thisHexIsOn = true;
+                }
+            }
+        }
+    }
+    private (int x, int y) onPink = (0,0);
+    private (int x, int y) offPink = (0,0);
+    private Stack<(int x, int y)> pinkTilesOn = new Stack<(int x, int y)>();
+    private Stack<(int x, int y)> pinkTilesOff = new Stack<(int x, int y)>();
+    void TravelOnOffHandler(){
+        if (onPink == (0,0)){
+            foreach (var hex in allHexes){
+                GameObject current = hex.Value;
+                SpriteRenderer spriteRenderer = current.GetComponent<SpriteRenderer>();
+                HexScript hexScript = current.GetComponent<HexScript>();
+
+                if (spriteRenderer.color == MapMakerScript.pink){
+                    if (current.activeSelf){ //Finds onPink and adds it to pinkTilesOn stack
+                        onPink = hex.Key;
+                        pinkTilesOn.Push(hex.Key);
+                    }
+                   else{  //otherwise puts an offPink into pinkTileOff stack
+                        pinkTilesOff.Push(hex.Key);
+                   } 
+                }
+            }
+        }
+        if (pinkTilesOff.Count == 0) {
+            int n = pinkTilesOn.Count - 1;
+            for (int i = 0; i < n; i++){
+                pinkTilesOff.Push(pinkTilesOn.Pop());
+            }
+            offPink = pinkTilesOn.Peek();
+        }
+        else {
+            offPink = pinkTilesOff.Pop();
+            pinkTilesOn.Push(offPink);
+        }
+        GameObject currentOn = allHexes[onPink];
+        HexScript hexScriptOn = currentOn.GetComponent<HexScript>();
+        currentOn.SetActive(false);
+        GameObject currentOff = allHexes[offPink];
+        HexScript hexScriptOff = currentOff.GetComponent<HexScript>();
+        currentOff.SetActive(true);
+        onPink = offPink;
+
+        PlayerScript.Instance.Move(currentOff.transform.position.x, currentOff.transform.position.y);
+    }
+    void EchoHandler(){
         
+    }
+    public bool won = false;
+    void WinLevelHandler(){
+        won = true;
+        DestroyAllHexes();
+        PlayerScript.Instance.playerFacing = 0;
+        LevelManagerScript.Instance.currentLevel++;
+        LevelManagerScript.Instance.SetLevel(LevelManagerScript.Instance.currentLevel);
     }
 
 }

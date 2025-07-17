@@ -16,6 +16,21 @@ Unity puzzle game
         2,11    4,11
             3,12
 
+Notes: 
+
+Conversions from coords to unity position:
+xPos = (x - mapComplexity) * xUnit; U<-R
+x = (mapComplexity + (xPos / xUnit)); R<-U
+yPos = ((mapComplexity * 2) - y) * yUnit;
+y = (mapComplexity * 2) - (yPos / yUnit);
+
+
+Level Ideas:
+-Set off blue chain in two spots for faster deletion
+-Maze of launch pads
+-Constant On/Off
+-Race the blue (clockwise vs counterclockwise launches)
+
 Tile concepts:
 -Wall/Can’t walk on
 -Slide/Ice

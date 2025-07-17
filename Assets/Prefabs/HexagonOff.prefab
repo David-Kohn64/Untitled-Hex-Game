@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3282641052607784497}
   - component: {fileID: 4139441970606256493}
+  - component: {fileID: 5997542197906569861}
   m_Layer: 0
   m_Name: HexagonOff
   m_TagString: Untagged
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 225486be8b1f81e42a4893b7bd2063d3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7d910b4480312b94b9ea1067f35105b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,3 +85,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5997542197906569861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9029079872275946434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25bba464b1b1c8e41aa0f6f25cc6cb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thisHexIsOn: 1
+  ccfalling: 0

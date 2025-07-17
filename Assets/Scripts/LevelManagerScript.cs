@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class LevelManagerScript : MonoBehaviour
 {
     public static LevelManagerScript Instance {get; private set;}
-    public int currentLevel = 1; 
+    public int currentLevel;
+    public (int x, int y) spawnPoint;
 
     void Awake()
     {
@@ -16,7 +17,7 @@ public class LevelManagerScript : MonoBehaviour
     void Start()
     {
         if (HexManagerScript.Instance.allHexes.Count == 0){
-            setLevel(currentLevel);
+            SetLevel(currentLevel);
         }
     }
 
@@ -26,20 +27,45 @@ public class LevelManagerScript : MonoBehaviour
         
     }
 
-    public void setLevel(int level)
+    public void SetLevel(int level)
     {
         switch (level)
         {
             case 1:
-                MapMakerScript.Instance.makeMap(level, 3);
                 currentLevel = level;
+                spawnPoint = (1, 4);
+                MapMakerScript.Instance.MakeMap(2);
+
                 break;
             case 2:
-                MapMakerScript.Instance.makeMap(level, 2);
                 currentLevel = level;
+                spawnPoint = (1, 4);
+                MapMakerScript.Instance.MakeMap(2);
                 break;
             case 3:
-
+                currentLevel = level;
+                spawnPoint = (1, 4);
+                MapMakerScript.Instance.MakeMap(2);
+                break;
+            case 4:
+                currentLevel = level;
+                spawnPoint = (1,4);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 5:
+                currentLevel = level;
+                spawnPoint = (0, 3);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 6:
+                currentLevel = level;
+                spawnPoint = (0, 3);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 21:
+                currentLevel = level;
+                spawnPoint = (0,5);
+                MapMakerScript.Instance.MakeMap(3);
                 break;
             default:
                 Debug.LogWarning("Level not implemented.");

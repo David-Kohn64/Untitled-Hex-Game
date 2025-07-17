@@ -10,7 +10,7 @@ public class UIManagerScript : MonoBehaviour
     public static UIManagerScript Instance {get; private set;}
 
     public TMP_Text levelName;
-    private int currentLevel;
+    private int currentLevel; //Some level save when restart button resets everything else
 
     // Start is called before the first frame update
     void Start()
@@ -22,12 +22,12 @@ public class UIManagerScript : MonoBehaviour
     void Update()
     {
         currentLevel = LevelManagerScript.Instance.currentLevel;
-        levelName.text = "Level " + currentLevel;
+        levelName.text = "Level " + LevelManagerScript.Instance.currentLevel;
     }
 
     public void RestartLevel(){
-        SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-        LevelManagerScript.Instance.setLevel(currentLevel); };
+        SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{
+        LevelManagerScript.Instance.SetLevel(currentLevel); };
     }
 
 }

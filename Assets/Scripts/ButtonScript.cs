@@ -97,87 +97,87 @@ public class ButtonScript : MonoBehaviour
                 break;
             case ButtonType.Level1:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(1); };
+                LevelManagerScript.Instance.SetLevel(1); };
                 break;
             case ButtonType.Level2:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(2); };
+                LevelManagerScript.Instance.SetLevel(2); };
                 break;
             case ButtonType.Level3:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(3); };
+                LevelManagerScript.Instance.SetLevel(3); };
                 break;
             case ButtonType.Level4:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(4); };
+                LevelManagerScript.Instance.SetLevel(4); };
                 break;
             case ButtonType.Level5:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(5); };
+                LevelManagerScript.Instance.SetLevel(5); };
                 break;
             case ButtonType.Level6:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(6); };
+                LevelManagerScript.Instance.SetLevel(6); };
                 break;
             case ButtonType.Level7:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(7); };
+                LevelManagerScript.Instance.SetLevel(7); };
                 break;
             case ButtonType.Level8:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(8); };
+                LevelManagerScript.Instance.SetLevel(8); };
                 break;
             case ButtonType.Level9:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(9); };
+                LevelManagerScript.Instance.SetLevel(9); };
                 break;
             case ButtonType.Level10:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(10); };
+                LevelManagerScript.Instance.SetLevel(10); };
                 break;
             case ButtonType.Level11:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(11); };
+                LevelManagerScript.Instance.SetLevel(11); };
                 break;
             case ButtonType.Level12:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(12); };
+                LevelManagerScript.Instance.SetLevel(12); };
                 break;
             case ButtonType.Level13:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(13); };
+                LevelManagerScript.Instance.SetLevel(13); };
                 break;
             case ButtonType.Level14:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(14); };
+                LevelManagerScript.Instance.SetLevel(14); };
                 break;
             case ButtonType.Level15:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(15); };
+                LevelManagerScript.Instance.SetLevel(15); };
                 break;
             case ButtonType.Level16:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(16); };
+                LevelManagerScript.Instance.SetLevel(16); };
                 break;
             case ButtonType.Level17:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(17); };
+                LevelManagerScript.Instance.SetLevel(17); };
                 break;
             case ButtonType.Level18:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(18); };
+                LevelManagerScript.Instance.SetLevel(18); };
                 break;
             case ButtonType.Level19:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(19); };
+                LevelManagerScript.Instance.SetLevel(19); };
                 break;
             case ButtonType.Level20:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(20); };
+                LevelManagerScript.Instance.SetLevel(20); };
                 break;
             case ButtonType.Level21:
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                LevelManagerScript.Instance.setLevel(21); };
+                LevelManagerScript.Instance.SetLevel(21); };
                 break;
             default:
                 break;
