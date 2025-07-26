@@ -107,10 +107,7 @@ public class MapMakerScript : MonoBehaviour
 
             if (color == yellow || color == pink)
             {
-                GameObject hexOffInstance = Instantiate(hexOff, new Vector3(unityXPos, unityYPos, 0), transform.rotation);
-                hexScript = hexOffInstance.GetComponent<HexScript>();
-                hexScript.ColorizeHex(color);
-                HexManagerScript.Instance.onOffHexes.Add((xReadablePos, yReadablePos), hexOffInstance);
+                CreateHexOff(unityXPos, unityYPos, color);
                 if (isHexOn == false)
                 {
                     isHexOn = true;
@@ -126,6 +123,13 @@ public class MapMakerScript : MonoBehaviour
             HexManagerScript.Instance.allHexes.Add((xReadablePos, yReadablePos), hexInstance);
         }
     }
+    public void CreateHexOff(float unityXPos, float unityYPos, Color color)
+    {
+        GameObject hexOffInstance = Instantiate(hexOff, new Vector3(unityXPos, unityYPos, 0), transform.rotation);
+        HexScript hexScript = hexOffInstance.GetComponent<HexScript>();
+        hexScript.ColorizeHex(color);
+        HexManagerScript.Instance.onOffHexes.Add((xReadablePos, yReadablePos), hexOffInstance);
+    }
     private void CreatePlayer((int x, int y) spawnPoint)
     {
         Instantiate(player, new Vector3(ToUnityPosition(spawnPoint.x, "x"), ToUnityPosition(spawnPoint.y, "y"), -1), transform.rotation);
@@ -136,17 +140,29 @@ public class MapMakerScript : MonoBehaviour
         switch (Level)
         {
             case 1:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel1, LevelData.Instance.allColorArraysLevel1);
+                return GetColorFromLists(LevelData.Instance.colorsUsedBuddingPath, LevelData.Instance.allColorArraysBuddingPath);
             case 2:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel2, LevelData.Instance.allColorArraysLevel2);
+                return GetColorFromLists(LevelData.Instance.colorsUsedCeruleanStep, LevelData.Instance.allColorArraysCeruleanStep);
             case 3:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel3, LevelData.Instance.allColorArraysLevel3);
+                return GetColorFromLists(LevelData.Instance.colorsUsedVioletLaunch, LevelData.Instance.allColorArraysVioletLaunch);
             case 4:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel4, LevelData.Instance.allColorArraysLevel4);
+                return GetColorFromLists(LevelData.Instance.colorsUsedInterception, LevelData.Instance.allColorArraysInterception);
             case 5:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel5, LevelData.Instance.allColorArraysLevel5);
+                return GetColorFromLists(LevelData.Instance.colorsUsedIslandHopping, LevelData.Instance.allColorArraysIslandHopping);
             case 6:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel6, LevelData.Instance.allColorArraysLevel6);
+                return GetColorFromLists(LevelData.Instance.colorsUsedChainingCommand, LevelData.Instance.allColorArraysChainingCommand);
+            case 7:
+                return GetColorFromLists(LevelData.Instance.colorsUsedChainingCollapse, LevelData.Instance.allColorArraysChainingCollapse);
+            case 8:
+                return GetColorFromLists(LevelData.Instance.colorsUsedGoldenToggle, LevelData.Instance.allColorArraysGoldenToggle, LevelData.Instance.yellowTilesOffGoldenToggle);
+            case 9:
+                return GetColorFromLists(LevelData.Instance.colorsUsedCrissCross, LevelData.Instance.allColorArraysCrissCross, LevelData.Instance.yellowTilesOffCrissCross);
+            case 10:
+                return GetColorFromLists(LevelData.Instance.colorsUsedCaptainsWheel, LevelData.Instance.allColorArraysCaptainsWheel, LevelData.Instance.yellowTilesOffCaptainsWheel);
+            case 11:
+                return GetColorFromLists(LevelData.Instance.colorsUsedBurnout, LevelData.Instance.allColorArraysBurnout, LevelData.Instance.yellowTilesOffBurnout);
+            case 12:
+                return GetColorFromLists(LevelData.Instance.colorsUsedLevel12, LevelData.Instance.allColorArraysLevel12, LevelData.Instance.yellowTilesOffLevel12);
             case 21:
                 return GetColorFromLists(LevelData.Instance.colorsUsedLevel21, LevelData.Instance.allColorArraysLevel21, LevelData.Instance.yellowTilesOffLevel21, LevelData.Instance.pinkTilesOffLevel21);
 

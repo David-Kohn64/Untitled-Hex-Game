@@ -106,6 +106,10 @@ public class HexScript : MonoBehaviour
         {
             HexManagerScript.Instance.onOnOff = true;
         }
+        if (spriteRenderer.color == MapMakerScript.orange)
+        {
+            HexManagerScript.Instance.ProcessActiveStep(gameObject, MapMakerScript.orange);
+        }
         if (spriteRenderer.color == MapMakerScript.pink)
         {
             HexManagerScript.Instance.ProcessActiveStep(gameObject, MapMakerScript.pink);

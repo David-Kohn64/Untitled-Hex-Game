@@ -51,13 +51,18 @@ public class HexManagerScript : MonoBehaviour
     }
     public void ProcessActiveStep(GameObject hex, Color color){ //Effects of tiles currently pressed on
         if (color.Equals(MapMakerScript.green)){
-            KeyHexCollectHandler(hex, MapMakerScript.green);
+            KeyHexCollectHandler(hex);
         }
-        if (color.Equals(MapMakerScript.pink)){
+        if (color.Equals(MapMakerScript.orange))
+        {
+            EchoHandler(hex);
+        }
+        if (color.Equals(MapMakerScript.pink))
+        {
             TravelOnOffHandler();
         }
         if (color.Equals(MapMakerScript.red)){
-            EchoHandler();
+            
         }
     }
     void ChainCollapseHandler(){
@@ -108,9 +113,10 @@ public class HexManagerScript : MonoBehaviour
     }
 
     
-    void KeyHexCollectHandler(GameObject hex, Color color){
+    void KeyHexCollectHandler(GameObject hex){
         SpriteRenderer spriteRenderer = hex.GetComponent<SpriteRenderer>(); 
         spriteRenderer.color = Color.white;
+        currHexColor = Color.white;
         MapMakerScript.Instance.amountKeysLeft--;
         if (MapMakerScript.Instance.amountKeysLeft == 0){ //If all key hexes are collected
             WinLevelHandler();
@@ -118,7 +124,7 @@ public class HexManagerScript : MonoBehaviour
     }
     public bool onOnOff = false;
     void OnOffButtonHandler(){
-        if (currHexColor != MapMakerScript.yellow && onOnOff == true)
+        if (currHexColor != MapMakerScript.yellow && currHexColor != MapMakerScript.orange && onOnOff == true)
         {
             onOnOff = false;
             foreach (var hex in allHexes)
@@ -140,7 +146,23 @@ public class HexManagerScript : MonoBehaviour
             }
         }
     }
-    private (int x, int y) onPink = (0,0);
+    void EchoHandler(GameObject hex)
+    {
+        SpriteRenderer spriteRenderer = hex.GetComponent<SpriteRenderer>();
+        spriteRenderer.color = prevHexColor;
+        currHexColor = spriteRenderer.color;
+
+        if (spriteRenderer.color == MapMakerScript.blue)
+        {
+            HexScript hexScript = hex.GetComponent<HexScript>();
+            hexScript.ccfalling = true;
+        }
+        if (spriteRenderer.color == MapMakerScript.yellow || spriteRenderer.color == MapMakerScript.pink)
+        {
+            MapMakerScript.Instance.CreateHexOff(hex.transform.position.x, hex.transform.position.y, spriteRenderer.color);
+        }
+    }
+    private (int x, int y) onPink = (0, 0);
     private (int x, int y) offPink = (0,0);
     private Stack<(int x, int y)> pinkTilesOn = new Stack<(int x, int y)>();
     private Stack<(int x, int y)> pinkTilesOff = new Stack<(int x, int y)>();
@@ -183,9 +205,7 @@ public class HexManagerScript : MonoBehaviour
 
         PlayerScript.Instance.Move(currentOff.transform.position.x, currentOff.transform.position.y);
     }
-    void EchoHandler(){
-        
-    }
+    
     public bool won = false;
     void WinLevelHandler(){
         won = true;

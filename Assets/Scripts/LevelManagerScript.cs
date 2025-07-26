@@ -35,7 +35,6 @@ public class LevelManagerScript : MonoBehaviour
                 currentLevel = level;
                 spawnPoint = (1, 4);
                 MapMakerScript.Instance.MakeMap(2);
-
                 break;
             case 2:
                 currentLevel = level;
@@ -57,7 +56,37 @@ public class LevelManagerScript : MonoBehaviour
                 spawnPoint = (0, 3);
                 MapMakerScript.Instance.MakeMap(3);
                 break;
-            case 6:
+            case 6: //5.5
+                currentLevel = level;
+                spawnPoint = (0, 3);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 7:
+                currentLevel = level;
+                spawnPoint = (0, 3);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 8:
+                currentLevel = level;
+                spawnPoint = (1, 4);
+                MapMakerScript.Instance.MakeMap(2);
+                break;
+            case 9:
+                currentLevel = level;
+                spawnPoint = (0, 3);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 10:
+                currentLevel = level;
+                spawnPoint = (0, 3);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 11:
+                currentLevel = level;
+                spawnPoint = (0, 3);
+                MapMakerScript.Instance.MakeMap(3);
+                break;
+            case 12:
                 currentLevel = level;
                 spawnPoint = (0, 3);
                 MapMakerScript.Instance.MakeMap(3);
