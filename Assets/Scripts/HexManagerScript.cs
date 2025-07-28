@@ -7,6 +7,7 @@ public class HexManagerScript : MonoBehaviour
     public static HexManagerScript Instance { get; private set; }
     public Dictionary<(int x, int y), GameObject> allHexes = new Dictionary<(int x, int y), GameObject>(); //assigns every hex to its coordinates
     public Dictionary<(int x, int y), GameObject> onOffHexes = new Dictionary<(int x, int y), GameObject>(); //dotted On/Off hex objects
+    public Dictionary<(int x, int y), GameObject> growthHexes = new Dictionary<(int x, int y), GameObject>(); //temporary growth tiles
     (int x, int y)[] neighborOffsets = { (-1, -1), (-1, 1), (0, -2), (0, 2), (1, -1), (1, 1)};
     public (int x, int y) currHex;
     public Color currHexColor;
@@ -33,24 +34,39 @@ public class HexManagerScript : MonoBehaviour
     {
         
     }
-    public void DestroyAllHexes(){ //probably wipe variables too? (currHex etc.)
-        foreach (var hex in allHexes){
+    public void DestroyAllHexes()
+    { //probably wipe variables too? (currHex etc.)
+        foreach (var hex in allHexes)
+        {
             Destroy(hex.Value);
         }
         allHexes.Clear();
 
-        foreach (var hex in onOffHexes){
+        foreach (var hex in onOffHexes)
+        {
             Destroy(hex.Value);
         }
         onOffHexes.Clear();
+
+        //foreach (var hex in growthHexes)
+        //{
+        //    Destroy(hex.Value);
+        //}
+        //growthHexes.Clear();
+        
     }
     public void ProcessPassiveStep()
     { //Lingering effects of tiles previously activated
         ChainCollapseHandler();
         OnOffButtonHandler();
+        DegrowthHandler();
     }
-    public void ProcessActiveStep(GameObject hex, Color color){ //Effects of tiles currently pressed on
-        if (color.Equals(MapMakerScript.green)){
+    int safety;
+    bool onRed;
+    public void ProcessActiveStep(GameObject hex, Color color)
+    { //Effects of tiles currently pressed on
+        if (color.Equals(MapMakerScript.green))
+        {
             KeyHexCollectHandler(hex);
         }
         if (color.Equals(MapMakerScript.orange))
@@ -61,8 +77,10 @@ public class HexManagerScript : MonoBehaviour
         {
             TravelOnOffHandler();
         }
-        if (color.Equals(MapMakerScript.red)){
-            
+        if (color.Equals(MapMakerScript.red))
+        {
+            safety = 100;
+            GrowthHandler(hex);
         }
     }
     void ChainCollapseHandler(){
@@ -162,6 +180,58 @@ public class HexManagerScript : MonoBehaviour
             MapMakerScript.Instance.CreateHexOff(hex.transform.position.x, hex.transform.position.y, spriteRenderer.color);
         }
     }
+    public bool growthOn = false;
+    void DegrowthHandler()
+    {
+        if (currHexColor != MapMakerScript.red && growthOn == true)
+        {
+            growthOn = false;
+            foreach (var hex in growthHexes)
+            {
+                Destroy(hex.Value);
+                allHexes.Remove(hex.Key);
+            }
+            growthHexes.Clear();
+        }
+    }
+    void GrowthHandler(GameObject hex)
+    {
+        if (safety > 0) {safety--;}
+        if (safety == 0) { return; }
+
+        (int x, int y) curr = (MapMakerScript.Instance.ToReadablePosition(hex.transform.position.x, "x"), MapMakerScript.Instance.ToReadablePosition(hex.transform.position.y, "y"));
+
+        Grow((curr.x, curr.y - 2));
+        Grow((curr.x, curr.y + 2));
+        Grow((curr.x - 1, curr.y - 1));
+        Grow((curr.x + 1, curr.y - 1));
+        Grow((curr.x - 1, curr.y + 1));
+        Grow((curr.x + 1, curr.y + 1));
+    }
+    void Grow((int x, int y) curr)
+    {
+        GameObject nextCurr;
+        if (!allHexes.ContainsKey(curr))
+        {
+            if (CheckInBounds(curr))
+            {
+                nextCurr = MapMakerScript.Instance.CreateNewHex(curr, MapMakerScript.red);
+                allHexes.Add(curr, nextCurr);
+                growthHexes.Add(curr, nextCurr);
+                GrowthHandler(nextCurr);
+            }
+        }
+    }
+    bool CheckInBounds((int x, int y) nextCurr)
+    {
+        if (nextCurr.x < 0 || nextCurr.y < 0) { return false; }
+        if (Mathf.Abs(3 - nextCurr.x) > MapMakerScript.Instance.currMapComplexity) { return false; }
+        if (Mathf.Abs(6 - nextCurr.y) > MapMakerScript.Instance.currMapComplexity * 2) { return false; }
+        if (Mathf.Abs(9 - (nextCurr.x + nextCurr.y)) > MapMakerScript.Instance.currMapComplexity * 2) { return false; }
+        if (Mathf.Abs(3 - nextCurr.x) + Mathf.Abs(6 - nextCurr.y) > MapMakerScript.Instance.currMapComplexity * 2) { return false; }
+        return true;
+    }
+
     private (int x, int y) onPink = (0, 0);
     private (int x, int y) offPink = (0,0);
     private Stack<(int x, int y)> pinkTilesOn = new Stack<(int x, int y)>();

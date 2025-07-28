@@ -110,13 +110,14 @@ public class HexScript : MonoBehaviour
         {
             HexManagerScript.Instance.ProcessActiveStep(gameObject, MapMakerScript.orange);
         }
-        if (spriteRenderer.color == MapMakerScript.pink)
-        {
-            HexManagerScript.Instance.ProcessActiveStep(gameObject, MapMakerScript.pink);
-        }
         if (spriteRenderer.color == MapMakerScript.red)
         {
             HexManagerScript.Instance.ProcessActiveStep(gameObject, MapMakerScript.red);
+            HexManagerScript.Instance.growthOn = true;
+        }
+        if (spriteRenderer.color == MapMakerScript.pink)
+        {
+            HexManagerScript.Instance.ProcessActiveStep(gameObject, MapMakerScript.pink);
         }
 
     }    
@@ -189,6 +190,7 @@ public class HexScript : MonoBehaviour
         }
         else{ //when not purple
             HexManagerScript.Instance.currHex = HexManagerScript.Instance.clickedHex;
+            Debug.Log(HexManagerScript.Instance.currHex);
             HexManagerScript.Instance.currHexColor = HexManagerScript.Instance.clickedHexColor;
             PlayerScript.Instance.Move(transform.position.x, transform.position.y);
         }
@@ -217,8 +219,9 @@ public class HexScript : MonoBehaviour
             HexManagerScript.Instance.won = false;
             return;
         }
-        if(!HexManagerScript.Instance.allHexes.ContainsKey(HexManagerScript.Instance.currHex))
+        if (!HexManagerScript.Instance.allHexes.ContainsKey(HexManagerScript.Instance.currHex))
         {
+            Debug.Log(HexManagerScript.Instance.currHex);
             PlayerScript.Instance.Fell();
         }
         

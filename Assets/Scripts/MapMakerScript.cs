@@ -11,6 +11,7 @@ public class MapMakerScript : MonoBehaviour
     [SerializeField] public GameObject player;
 
     public int mapComplexity = 3;  //Should be set by levelManager and not right now
+    public int currMapComplexity;
 
     public static float xUnit = 1.2f; //Units of distance between hexes
     public static float yUnit = 0.7f; //Units of distance between hexes
@@ -52,6 +53,7 @@ public class MapMakerScript : MonoBehaviour
 
     public void MakeMap(int mapComplexity)
     {
+        currMapComplexity = mapComplexity;
         originXPosition = -1 * xUnit * mapComplexity; //Unity x-coordinate of where origin should be
         originYPosition = yUnit * mapComplexity; //Unity y-coordinate of where origin should be
 
@@ -123,12 +125,21 @@ public class MapMakerScript : MonoBehaviour
             HexManagerScript.Instance.allHexes.Add((xReadablePos, yReadablePos), hexInstance);
         }
     }
+    public GameObject CreateNewHex((int xReadablePos, int yReadablePos) newHex, Color color)
+    {
+        GameObject hexInstance = Instantiate(hex, new Vector3(ToUnityPosition(newHex.xReadablePos, "x"), ToUnityPosition(newHex.yReadablePos, "y"), 0), transform.rotation);
+        HexScript hexScript = hexInstance.GetComponent<HexScript>();
+        hexScript.coordinates = (newHex.xReadablePos, newHex.yReadablePos);
+        hexScript.ColorizeHex(color);
+        return hexInstance;
+        
+    }
     public void CreateHexOff(float unityXPos, float unityYPos, Color color)
     {
         GameObject hexOffInstance = Instantiate(hexOff, new Vector3(unityXPos, unityYPos, 0), transform.rotation);
         HexScript hexScript = hexOffInstance.GetComponent<HexScript>();
         hexScript.ColorizeHex(color);
-        HexManagerScript.Instance.onOffHexes.Add((xReadablePos, yReadablePos), hexOffInstance);
+        HexManagerScript.Instance.onOffHexes.Add((ToReadablePosition(unityXPos, "x"), ToReadablePosition(unityYPos, "y")), hexOffInstance);
     }
     private void CreatePlayer((int x, int y) spawnPoint)
     {
@@ -152,17 +163,23 @@ public class MapMakerScript : MonoBehaviour
             case 6:
                 return GetColorFromLists(LevelData.Instance.colorsUsedChainingCommand, LevelData.Instance.allColorArraysChainingCommand);
             case 7:
-                return GetColorFromLists(LevelData.Instance.colorsUsedChainingCollapse, LevelData.Instance.allColorArraysChainingCollapse);
-            case 8:
                 return GetColorFromLists(LevelData.Instance.colorsUsedGoldenToggle, LevelData.Instance.allColorArraysGoldenToggle, LevelData.Instance.yellowTilesOffGoldenToggle);
-            case 9:
+            case 8:
                 return GetColorFromLists(LevelData.Instance.colorsUsedCrissCross, LevelData.Instance.allColorArraysCrissCross, LevelData.Instance.yellowTilesOffCrissCross);
-            case 10:
+            case 9:
                 return GetColorFromLists(LevelData.Instance.colorsUsedCaptainsWheel, LevelData.Instance.allColorArraysCaptainsWheel, LevelData.Instance.yellowTilesOffCaptainsWheel);
-            case 11:
+            case 10:
                 return GetColorFromLists(LevelData.Instance.colorsUsedBurnout, LevelData.Instance.allColorArraysBurnout, LevelData.Instance.yellowTilesOffBurnout);
+            case 11:
+                return GetColorFromLists(LevelData.Instance.colorsUsedEcholocation, LevelData.Instance.allColorArraysEcholocation, LevelData.Instance.yellowTilesOffEcholocation);
             case 12:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel12, LevelData.Instance.allColorArraysLevel12, LevelData.Instance.yellowTilesOffLevel12);
+                return GetColorFromLists(LevelData.Instance.colorsUsedStarburst, LevelData.Instance.allColorArraysStarburst, LevelData.Instance.yellowTilesOffStarburst);
+            case 13:
+                return GetColorFromLists(LevelData.Instance.colorsUsedAngelWings, LevelData.Instance.allColorArraysAngelWings, LevelData.Instance.yellowTilesOffAngelWings);
+            case 14:
+                return GetColorFromLists(LevelData.Instance.colorsUsedTurtle, LevelData.Instance.allColorArraysTurtle, LevelData.Instance.yellowTilesOffTurtle);
+            case 15:
+                return GetColorFromLists(LevelData.Instance.colorsUsedLevel15, LevelData.Instance.allColorArraysLevel15, LevelData.Instance.yellowTilesOffLevel15);
             case 21:
                 return GetColorFromLists(LevelData.Instance.colorsUsedLevel21, LevelData.Instance.allColorArraysLevel21, LevelData.Instance.yellowTilesOffLevel21, LevelData.Instance.pinkTilesOffLevel21);
 

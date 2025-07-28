@@ -49,11 +49,21 @@ public class LevelData : MonoBehaviour
         allColorArraysBurnout = new (int, int)[][]{
             whiteTilesBurnout, blueTilesBurnout, greenTilesBurnout, purpleTilesBurnout, yellowTilesOnBurnout, yellowTilesOffBurnout
         };
-        allColorArraysLevel12 = new (int, int)[][]{
-            whiteTilesLevel12, blueTilesLevel12, greenTilesLevel12, purpleTilesLevel12, yellowTilesOnLevel12, yellowTilesOffLevel12, orangeTilesLevel12
+        allColorArraysEcholocation = new (int, int)[][]{
+            whiteTilesEcholocation, blueTilesEcholocation, greenTilesEcholocation, purpleTilesEcholocation, yellowTilesOnEcholocation, yellowTilesOffEcholocation, orangeTilesEcholocation
         };
-        
-
+        allColorArraysStarburst = new (int, int)[][]{
+            whiteTilesStarburst, blueTilesStarburst, greenTilesStarburst, purpleTilesStarburst, yellowTilesOnStarburst, yellowTilesOffStarburst, orangeTilesStarburst
+        };
+        allColorArraysAngelWings = new (int, int)[][]{
+            whiteTilesAngelWings, blueTilesAngelWings, greenTilesAngelWings, purpleTilesAngelWings, yellowTilesOnAngelWings, yellowTilesOffAngelWings, orangeTilesAngelWings
+        };
+        allColorArraysTurtle = new (int, int)[][]{
+            whiteTilesTurtle, blueTilesTurtle, greenTilesTurtle, purpleTilesTurtle, yellowTilesOnTurtle, yellowTilesOffTurtle, orangeTilesTurtle
+        };
+        allColorArraysLevel15 = new (int, int)[][]{
+            whiteTilesLevel15, blueTilesLevel15, greenTilesLevel15, purpleTilesLevel15, yellowTilesOnLevel15, yellowTilesOffLevel15, orangeTilesLevel15, redTilesLevel15
+        };
 
 
         allColorArraysLevel21 = new (int, int)[][]{
@@ -164,7 +174,7 @@ public class LevelData : MonoBehaviour
         (4,1), (4,11)
     };
 
-    //Level7
+    //Bad Level 7
     public (int, int)[][] allColorArraysChainingCollapse;
     public Color[] colorsUsedChainingCollapse = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
         Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple
@@ -182,7 +192,7 @@ public class LevelData : MonoBehaviour
         (1,2), (1,10), (4,3), (4,11), (6,7)
     };
 
-    //Level8
+    //Level7
     public (int, int)[][] allColorArraysGoldenToggle;
     public Color[] colorsUsedGoldenToggle = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
         Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow
@@ -206,7 +216,7 @@ public class LevelData : MonoBehaviour
         (1,8), (2,7), (4,7), (5,8)
     };
 
-    //Level9
+    //Level8
     public (int, int)[][] allColorArraysCrissCross;
     public Color[] colorsUsedCrissCross = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
         Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow
@@ -230,7 +240,7 @@ public class LevelData : MonoBehaviour
         (1,8), (2,7), (4,5), (5,4), 
     };
 
-    //Level10
+    //Level9
     public (int, int)[][] allColorArraysCaptainsWheel;
     public Color[] colorsUsedCaptainsWheel = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
         Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow
@@ -255,7 +265,7 @@ public class LevelData : MonoBehaviour
         (3,2), (1,8), (5,8)
     };
 
-    //Level11
+    //Level10
     public (int, int)[][] allColorArraysBurnout;
     public Color[] colorsUsedBurnout = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
         Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow
@@ -281,35 +291,153 @@ public class LevelData : MonoBehaviour
        
     };
 
-    //Level12
-    public (int, int)[][] allColorArraysLevel12;
-    public Color[] colorsUsedLevel12 = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
+    //Level11
+    public (int, int)[][] allColorArraysEcholocation;
+    public Color[] colorsUsedEcholocation = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
         Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow, MapMakerScript.orange
     };
-    public (int, int)[] whiteTilesLevel12 = new (int, int)[]{
+    public (int, int)[] whiteTilesEcholocation = new (int, int)[]{
+        (1,4), (2,3), (3,2), (4,3), (5,4), (1,6), (1,8), (2,9), (3,10)
+    };
+    public (int, int)[] blueTilesEcholocation = new (int, int)[] {
+        (2,7)
+    };
+    public (int, int)[] greenTilesEcholocation = new (int, int)[] {
+        (3,8), (6,9)
+    };
+    public (int, int)[] purpleTilesEcholocation = new (int, int)[] {
+        (3,4), (5,8)
+    };
+    public (int, int)[] yellowTilesOnEcholocation = new (int, int)[] {
+        (2,5)
+    };
+    public (int, int)[] yellowTilesOffEcholocation = new (int, int)[] {
+        (4,5)
+    };
+    public (int, int)[] orangeTilesEcholocation = new (int, int)[] {
+        (3,6)
+    };
+
+    //Level12
+    public (int, int)[][] allColorArraysStarburst;
+    public Color[] colorsUsedStarburst = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
+        Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow, MapMakerScript.orange
+    };
+    public (int, int)[] whiteTilesStarburst = new (int, int)[]{
         
     };
-    public (int, int)[] blueTilesLevel12 = new (int, int)[] {
-        
+    public (int, int)[] blueTilesStarburst = new (int, int)[] {
+        (1,4)
     };
-    public (int, int)[] greenTilesLevel12 = new (int, int)[] {
-        
+    public (int, int)[] greenTilesStarburst = new (int, int)[] {
+        (1,8), (5,8), (5,4)
     };
-    public (int, int)[] purpleTilesLevel12 = new (int, int)[] {
-        
+    public (int, int)[] purpleTilesStarburst = new (int, int)[] {
+        (3,10), (3,2)
     };
-    public (int, int)[] yellowTilesOnLevel12 = new (int, int)[] {
-        
+    public (int, int)[] yellowTilesOnStarburst = new (int, int)[] {
+        (3,6)
     };
-    public (int, int)[] yellowTilesOffLevel12 = new (int, int)[] {
+    public (int, int)[] yellowTilesOffStarburst = new (int, int)[] {
        
     };
-    public (int, int)[] orangeTilesLevel12 = new (int, int)[] {
-        
+    public (int, int)[] orangeTilesStarburst = new (int, int)[] {
+       (3,4), (2,5), (2,7), (3,8), (4,5), (4,7)
     };
 
 
-  
+    //Level13
+    public (int, int)[][] allColorArraysAngelWings;
+    public Color[] colorsUsedAngelWings = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
+        Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow, MapMakerScript.orange
+    };
+    public (int, int)[] whiteTilesAngelWings = new (int, int)[]{
+        (0,3), (0,5), (0,7), (0,9), (1,10), (5,10), (6,3), (6,5), (6,7), (6,9)
+    };
+    public (int, int)[] blueTilesAngelWings = new (int, int)[] {
+        (2,7), (3,8), (4,7), (4,5)
+    };
+    public (int, int)[] greenTilesAngelWings = new (int, int)[] {
+        (2,1), (4,1)
+    };
+    public (int, int)[] purpleTilesAngelWings = new (int, int)[] {
+        (3,0), (3,12)
+    };
+    public (int, int)[] yellowTilesOnAngelWings = new (int, int)[] {
+        (1,4), (1,6), (1,8), (2,9), (2,11), (5,4), (5,6), (5,8), (4,9), (4,11)
+    };
+    public (int, int)[] yellowTilesOffAngelWings = new (int, int)[] {
+        (3,4)
+    };
+    public (int, int)[] orangeTilesAngelWings = new (int, int)[] {
+       (2,5), (3,6)
+    };
+
+    //Level14
+    public (int, int)[][] allColorArraysTurtle;
+    public Color[] colorsUsedTurtle = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
+        Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow, MapMakerScript.orange
+    };
+    public (int, int)[] whiteTilesTurtle = new (int, int)[]{
+        
+    };
+    public (int, int)[] blueTilesTurtle = new (int, int)[] {
+        (5,2), (2,9), (4,9), (3, 6),
+    };
+    public (int, int)[] greenTilesTurtle = new (int, int)[] {
+        (3,0), (1,10), (5,10)
+    };
+    public (int, int)[] purpleTilesTurtle = new (int, int)[] {
+       
+    };
+    public (int, int)[] yellowTilesOnTurtle = new (int, int)[] {
+        (0,3), (1,2)
+    };
+    public (int, int)[] yellowTilesOffTurtle = new (int, int)[] {
+        (6,3), (5, 8), (1, 8)
+    };
+    public (int, int)[] orangeTilesTurtle = new (int, int)[] {
+       (1, 4), (1, 6), (2, 3), (2, 5), (2, 7),
+        (3, 2), (3, 4),  (3, 8), 
+        (4, 3), (4, 5), (4, 7), (5, 4), (5, 6), 
+    };
+
+    //Level15
+    public (int, int)[][] allColorArraysLevel15;
+    public Color[] colorsUsedLevel15  = new Color[]{ //WHEN ADDING NEW COLOR, ADD TO SCRIPT IN INSPECTOR AS WELL
+        Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow, MapMakerScript.orange, MapMakerScript.red
+    };
+    public (int, int)[] whiteTilesLevel15 = new (int, int)[]{
+        (2,5)
+    };
+    public (int, int)[] blueTilesLevel15 = new (int, int)[] {
+        
+    };
+    public (int, int)[] greenTilesLevel15  = new (int, int)[] {
+        
+    };
+    public (int, int)[] purpleTilesLevel15  = new (int, int)[] {
+       
+    };
+    public (int, int)[] yellowTilesOnLevel15  = new (int, int)[] {
+        
+    };
+    public (int, int)[] yellowTilesOffLevel15  = new (int, int)[] {
+        
+    };
+    public (int, int)[] orangeTilesLevel15  = new (int, int)[] {
+       
+    };
+    public (int, int)[] redTilesLevel15  = new (int, int)[] {
+       (3,6)
+    };
+
+
+
+
+
+
+
 
 
 
@@ -354,8 +482,8 @@ public class LevelData : MonoBehaviour
 
     /*
     public (int, int)[] whiteTilesLevel1 = new (int, int)[]{     --complexity 2
-        (1, 4), (1, 6), (1, 8), (2, 3), (2, 5), (2, 7)
-        (2, 9), (3, 2), (3, 4), (3, 6), (3, 8), (3,10)
+        (1, 4), (1, 6), (1, 8), (2, 3), (2, 5), (2, 7),
+        (2, 9), (3, 2), (3, 4), (3, 6), (3, 8), (3,10),
         (4, 3), (4, 5), (4, 7), (4, 9), (5, 4), (5, 6), (5, 8)
     };
 
