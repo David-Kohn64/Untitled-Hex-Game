@@ -241,6 +241,7 @@ MonoBehaviour:
   clickedHexColor: {r: 1, g: 1, b: 1, a: 1}
   delayedActivateHex: {fileID: 0}
   onOnOff: 0
+  growthOn: 0
   won: 0
 --- !u!1 &519420028
 GameObject:
@@ -588,7 +589,34 @@ MonoBehaviour:
   - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
   - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
   - {r: 1, g: 0.6901961, b: 0, a: 1}
-  colorsUsedLevel15:
+  colorsUsedRedRising:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0, g: 0.41960785, b: 0.23921569, a: 1}
+  - {r: 0.6039216, g: 0.2509804, b: 0.99607843, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 1, g: 0.6901961, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  colorsUsedReconnect:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0, g: 0.41960785, b: 0.23921569, a: 1}
+  - {r: 0.6039216, g: 0.2509804, b: 0.99607843, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 1, g: 0.6901961, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  colorsUsedJellyDonut:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0, g: 0.41960785, b: 0.23921569, a: 1}
+  - {r: 0.6039216, g: 0.2509804, b: 0.99607843, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 1, g: 0.6901961, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  colorsUsedCulmination:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
   - {r: 0, g: 0.41960785, b: 0.23921569, a: 1}
@@ -754,6 +782,7 @@ MonoBehaviour:
   hexOff: {fileID: 9029079872275946434, guid: f1d1d57b4f58ddf498cfb32c130b5d02, type: 3}
   player: {fileID: 6995204056459047480, guid: b9acac0661e695c40b4a38f5a2d7640e, type: 3}
   mapComplexity: 3
+  currMapComplexity: 0
   thereIsAPlayer: 0
   isHexOn: 1
   amountKeysLeft: 0
@@ -949,7 +978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae58b817df6bd64e83e2aeec892ae58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 15
+  currentLevel: 18
 --- !u!1 &2095835800
 GameObject:
   m_ObjectHideFlags: 0

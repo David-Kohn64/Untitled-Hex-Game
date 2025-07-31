@@ -61,8 +61,6 @@ public class HexManagerScript : MonoBehaviour
         OnOffButtonHandler();
         DegrowthHandler();
     }
-    int safety;
-    bool onRed;
     public void ProcessActiveStep(GameObject hex, Color color)
     { //Effects of tiles currently pressed on
         if (color.Equals(MapMakerScript.green))
@@ -79,7 +77,6 @@ public class HexManagerScript : MonoBehaviour
         }
         if (color.Equals(MapMakerScript.red))
         {
-            safety = 100;
             GrowthHandler(hex);
         }
     }
@@ -189,15 +186,13 @@ public class HexManagerScript : MonoBehaviour
             foreach (var hex in growthHexes)
             {
                 Destroy(hex.Value);
-                allHexes.Remove(hex.Key);
             }
             growthHexes.Clear();
         }
     }
     void GrowthHandler(GameObject hex)
     {
-        if (safety > 0) {safety--;}
-        if (safety == 0) { return; }
+        if (growthOn == true) { return; }
 
         (int x, int y) curr = (MapMakerScript.Instance.ToReadablePosition(hex.transform.position.x, "x"), MapMakerScript.Instance.ToReadablePosition(hex.transform.position.y, "y"));
 
@@ -211,12 +206,11 @@ public class HexManagerScript : MonoBehaviour
     void Grow((int x, int y) curr)
     {
         GameObject nextCurr;
-        if (!allHexes.ContainsKey(curr))
+        if ((!allHexes.ContainsKey(curr) && !growthHexes.ContainsKey(curr) ) || onOffHexes.ContainsKey(curr) && !allHexes[curr].activeInHierarchy && !growthHexes.ContainsKey(curr))
         {
             if (CheckInBounds(curr))
             {
                 nextCurr = MapMakerScript.Instance.CreateNewHex(curr, MapMakerScript.red);
-                allHexes.Add(curr, nextCurr);
                 growthHexes.Add(curr, nextCurr);
                 GrowthHandler(nextCurr);
             }

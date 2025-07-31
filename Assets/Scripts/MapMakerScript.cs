@@ -179,7 +179,14 @@ public class MapMakerScript : MonoBehaviour
             case 14:
                 return GetColorFromLists(LevelData.Instance.colorsUsedTurtle, LevelData.Instance.allColorArraysTurtle, LevelData.Instance.yellowTilesOffTurtle);
             case 15:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel15, LevelData.Instance.allColorArraysLevel15, LevelData.Instance.yellowTilesOffLevel15);
+                return GetColorFromLists(LevelData.Instance.colorsUsedRedRising, LevelData.Instance.allColorArraysRedRising, LevelData.Instance.yellowTilesOffRedRising);
+            case 16:
+                return GetColorFromLists(LevelData.Instance.colorsUsedReconnect, LevelData.Instance.allColorArraysReconnect, LevelData.Instance.yellowTilesOffReconnect);
+            case 17:
+                return GetColorFromLists(LevelData.Instance.colorsUsedJellyDonut, LevelData.Instance.allColorArraysJellyDonut, LevelData.Instance.yellowTilesOffJellyDonut);
+            case 18:
+                return GetColorFromLists(LevelData.Instance.colorsUsedCulmination, LevelData.Instance.allColorArraysCulmination, LevelData.Instance.yellowTilesOffCulmination);
+            
             case 21:
                 return GetColorFromLists(LevelData.Instance.colorsUsedLevel21, LevelData.Instance.allColorArraysLevel21, LevelData.Instance.yellowTilesOffLevel21, LevelData.Instance.pinkTilesOffLevel21);
 
