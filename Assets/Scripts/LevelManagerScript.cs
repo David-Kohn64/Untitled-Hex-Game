@@ -121,7 +121,6 @@ public class LevelManagerScript : MonoBehaviour
                 spawnPoint = (0,3);
                 MapMakerScript.Instance.MakeMap(3);
                 break;
-            /*
             case 19:
                 currentLevel = level;
                 spawnPoint = (0,3);
@@ -132,7 +131,6 @@ public class LevelManagerScript : MonoBehaviour
                 spawnPoint = (0,3);
                 MapMakerScript.Instance.MakeMap(3);
                 break;
-            */
             case 21:
                 currentLevel = level;
                 spawnPoint = (0,5);

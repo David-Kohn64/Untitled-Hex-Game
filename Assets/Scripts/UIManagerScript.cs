@@ -23,6 +23,11 @@ public class UIManagerScript : MonoBehaviour
     {
         currentLevel = LevelManagerScript.Instance.currentLevel;
         levelName.text = "Level " + LevelManagerScript.Instance.currentLevel;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RestartLevel();
+        }
     }
 
     public void RestartLevel(){

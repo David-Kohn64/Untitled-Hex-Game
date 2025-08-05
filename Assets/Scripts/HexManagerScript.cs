@@ -13,8 +13,6 @@ public class HexManagerScript : MonoBehaviour
     public Color currHexColor;
     public (int x, int y) prevHex;
     public Color prevHexColor;
-    public (int x, int y) hoverHex;
-    public Color hoverHexColor;
     public (int x, int y) clickedHex;
     public Color clickedHexColor;
     public GameObject delayedActivateHex = null;
@@ -275,7 +273,7 @@ public class HexManagerScript : MonoBehaviour
         won = true;
         DestroyAllHexes();
         PlayerScript.Instance.playerFacing = 0;
-        LevelManagerScript.Instance.currentLevel++;
+        if (LevelManagerScript.Instance.currentLevel != 20) { LevelManagerScript.Instance.currentLevel++; }
         LevelManagerScript.Instance.SetLevel(LevelManagerScript.Instance.currentLevel);
     }
 

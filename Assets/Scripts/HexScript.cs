@@ -34,11 +34,12 @@ public class HexScript : MonoBehaviour
     void Update()
     {
 
-        if(mouseIsOn ){
+        if (mouseIsOn)
+        {
             hoverTime += Time.deltaTime * 2f;
-            float scaleModifier = 1.0714f + Mathf.Abs(Mathf.Sin(270+hoverTime) /14f);
+            float scaleModifier = 1.0714f + Mathf.Abs(Mathf.Sin(270 + hoverTime) / 14f);
             transform.localScale = originalScale * scaleModifier;
-       }
+        }
 
     }
 
@@ -46,9 +47,8 @@ public class HexScript : MonoBehaviour
     private int hexRelationForPlayerFacing;
     private void OnMouseEnter()
     {
-        HexManagerScript.Instance.hoverHex = coordinates; 
-        HexManagerScript.Instance.hoverHexColor = spriteRenderer.color;
-        if (CheckIfClickable()){
+        if (CheckIfClickable())
+        {
             PlayerScript.Instance.playerFacing = GetPlayerFaceDirection(); //for ship facing/rotation, hexes labeled 1-6 counter-clockwise
             zPos = transform.position.z; //Only needs to be called once but I put it here for organization but technically not optimal
             Vector3 newZ = transform.position;
@@ -71,7 +71,7 @@ public class HexScript : MonoBehaviour
             mouseIsOn = false;
         }
     }
-    private void OnMouseDown()
+    public void OnMouseDown()
     {
         if (CheckIfClickable()){
             PlayerScript.Instance.playerFacing = GetPlayerFaceDirection();
@@ -154,7 +154,7 @@ public class HexScript : MonoBehaviour
                 if (!HexManagerScript.Instance.allHexes.ContainsKey(candidatePad)){
                     continue;
                 }
-                if (candidatePad == HexManagerScript.Instance.hoverHex){
+                if (candidatePad == this.coordinates){
                     return !CheckIfPlayerOn();
                 }
             }

@@ -17,7 +17,7 @@ public class LevelData : MonoBehaviour
         Instance = this;
 
         allColorArraysBuddingPath = new (int, int)[][]{
-            whiteTilesBuddingPath, greenTilesBuddingPath, 
+            whiteTilesBuddingPath, greenTilesBuddingPath,
         };
         allColorArraysCeruleanStep = new (int, int)[][]{
             whiteTilesCeruleanStep, blueTilesCeruleanStep, greenTilesCeruleanStep,
@@ -73,8 +73,6 @@ public class LevelData : MonoBehaviour
         allColorArraysCulmination = new (int, int)[][]{
             whiteTilesCulmination, blueTilesCulmination, greenTilesCulmination, purpleTilesCulmination, yellowTilesOnCulmination, yellowTilesOffCulmination, orangeTilesCulmination, redTilesCulmination
         };
-
-
         allColorArraysLevel21 = new (int, int)[][]{
             whiteTilesLevel21, blueTilesOnLevel21, greenTilesLevel21, yellowTilesOnLevel21, yellowTilesOffLevel21, purpleTilesLevel21, orangeTilesLevel21, pinkTilesOnLevel21, pinkTilesOffLevel21, redTilesLevel21,
         };
@@ -507,10 +505,10 @@ public class LevelData : MonoBehaviour
         Color.white, MapMakerScript.blue, MapMakerScript.green, MapMakerScript.purple, MapMakerScript.yellow, MapMakerScript.yellow, MapMakerScript.orange, MapMakerScript.red
     };
     public (int, int)[] whiteTilesCulmination = new (int, int)[]{
-       (0,3), (0,5), (0,7), (1,2), (1,4), (1,6), (2,3)
+       (0,3), (0,5), (0,7), (1,2), (1,4), (3,8), 
     };
     public (int, int)[] blueTilesCulmination = new (int, int)[] {
-        (2,5)
+       (2,5), (2,3)
     };
     public (int, int)[] greenTilesCulmination = new (int, int)[] {
        (4,11), (6,3)
@@ -519,13 +517,13 @@ public class LevelData : MonoBehaviour
        (2,11), (6,7)
     };
     public (int, int)[] yellowTilesOnCulmination = new (int, int)[] {
-        (0,9), (1,10)
+        (0,9), (1,10), 
     };
     public (int, int)[] yellowTilesOffCulmination = new (int, int)[] {
        (5,4), (4,5), (4,7), (4,9)
     };
     public (int, int)[] orangeTilesCulmination = new (int, int)[] {
-        (3,4), (3,6), (3,8), (2,9)
+        (2,7), (3,4), (2,9)
     };
     public (int, int)[] redTilesCulmination = new (int, int)[] {
         (6,9)

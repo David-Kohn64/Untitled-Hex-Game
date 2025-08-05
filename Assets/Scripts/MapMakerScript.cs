@@ -34,6 +34,11 @@ public class MapMakerScript : MonoBehaviour
     public static Color pink = new Color(254f / 255f, 100f / 255f, 225f / 255f);
     public static Color red = new Color(255f / 255f, 0f / 255f, 0f / 255f);
     public static Color black = new Color(100f / 255f, 100f / 255f, 100f / 255f);
+    public Color[] colorsUsed = new Color[]{ 
+        Color.white, green, green, blue, blue, blue, blue, blue, yellow, yellow, yellow, yellow, orange, purple, red, Color.black, Color.black, Color.black, Color.black
+    };
+    public System.Random random = new System.Random();
+    private bool firstHex = true;
 
     void Awake()
     {
@@ -132,7 +137,7 @@ public class MapMakerScript : MonoBehaviour
         hexScript.coordinates = (newHex.xReadablePos, newHex.yReadablePos);
         hexScript.ColorizeHex(color);
         return hexInstance;
-        
+
     }
     public void CreateHexOff(float unityXPos, float unityYPos, Color color)
     {
@@ -186,10 +191,23 @@ public class MapMakerScript : MonoBehaviour
                 return GetColorFromLists(LevelData.Instance.colorsUsedJellyDonut, LevelData.Instance.allColorArraysJellyDonut, LevelData.Instance.yellowTilesOffJellyDonut);
             case 18:
                 return GetColorFromLists(LevelData.Instance.colorsUsedCulmination, LevelData.Instance.allColorArraysCulmination, LevelData.Instance.yellowTilesOffCulmination);
-            
+
             case 21:
                 return GetColorFromLists(LevelData.Instance.colorsUsedLevel21, LevelData.Instance.allColorArraysLevel21, LevelData.Instance.yellowTilesOffLevel21, LevelData.Instance.pinkTilesOffLevel21);
-
+            case 20:
+                int randomColor = random.Next(0, 19);
+                if (firstHex && randomColor > 15) {randomColor = random.Next(0, 15);}
+                Color returnRandomColor = colorsUsed[randomColor];
+                if (returnRandomColor == yellow)
+                {
+                    int sixtySixPercent = random.Next(0, 3);
+                    if (sixtySixPercent == 2 && !firstHex)
+                    {
+                        isHexOn = !isHexOn;
+                    }
+                }
+                firstHex = false;
+                return returnRandomColor;
             default:
                 Debug.LogWarning("Level not implemented");
                 return Color.white;
@@ -217,7 +235,7 @@ public class MapMakerScript : MonoBehaviour
         }
         return Color.black; //This means do not create hex!
     }
-    private Color GetColorFromLists(Color[] colorsUsed, (int, int)[][] allColors, (int, int)[] yellowTilesOff) { return GetColorFromLists(colorsUsed, allColors, yellowTilesOff, yellowTilesOff);}
+    private Color GetColorFromLists(Color[] colorsUsed, (int, int)[][] allColors, (int, int)[] yellowTilesOff) { return GetColorFromLists(colorsUsed, allColors, yellowTilesOff, yellowTilesOff); }
     private Color GetColorFromLists(Color[] colorsUsed, (int, int)[][] allColors)
     {
         const float tolerance = 0.01f;
@@ -237,20 +255,24 @@ public class MapMakerScript : MonoBehaviour
 
     public int ToReadablePosition(float unityPos, string axis)
     {
-        if (axis.Equals("x")){
+        if (axis.Equals("x"))
+        {
             return (int)Mathf.Round(mapComplexity + (unityPos / xUnit));
         }
-        else { //y-axis
+        else
+        { //y-axis
             return (int)Mathf.Round((mapComplexity * 2) - (unityPos / yUnit));
         }
     }
 
     public float ToUnityPosition(int readablePos, string axis)
     {
-        if (axis.Equals("x")){
+        if (axis.Equals("x"))
+        {
             return (readablePos - mapComplexity) * xUnit;
         }
-        else { //y-axis
+        else
+        { //y-axis
             return (mapComplexity * 2 - readablePos) * yUnit;
         }
     }
