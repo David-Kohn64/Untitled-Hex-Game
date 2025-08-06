@@ -13,7 +13,7 @@ public class ButtonScript : MonoBehaviour
     private float hoverTime = 0f;
     private Vector3 originalScale;
     private RectTransform rectTransform; 
-    public enum ButtonType { Embark, Options, About, Exit, Level1, Level2, Level3, Level4, Level5, 
+    public enum ButtonType { Embark, Levels, Infinite, Editor, Options, About, Exit, Level1, Level2, Level3, Level4, Level5, 
         Level6, Level7, Level8, Level9, Level10, Level11, Level12, Level13, Level14, Level15, Level16,
         Level17, Level18, Level19, Level20, Level21 }
     public ButtonType buttonType;
@@ -84,10 +84,19 @@ public class ButtonScript : MonoBehaviour
         switch (buttonType)
         {
             case ButtonType.Embark:
+                mainMenuScript.PanEmbark();
+                break;
+            case ButtonType.Levels:
                 SceneManager.LoadSceneAsync("LevelSelect");
                 break;
+            case ButtonType.Infinite:
+                //Infinite Mode 
+                break;
+            case ButtonType.Editor:
+                //Level Editor
+                break;
             case ButtonType.Options:
-                //Options
+                mainMenuScript.PanOptions();
                 break;
             case ButtonType.About:
                 mainMenuScript.PanAbout();

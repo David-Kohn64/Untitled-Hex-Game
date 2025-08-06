@@ -537,7 +537,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 7
+  buttonType: 10
 --- !u!114 &154411451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -808,7 +808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 18
+  buttonType: 21
 --- !u!114 &171907646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -945,7 +945,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 8
+  buttonType: 11
 --- !u!114 &184497232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1432,7 +1432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 4
+  buttonType: 7
 --- !u!1 &277268695
 GameObject:
   m_ObjectHideFlags: 0
@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 13
+  buttonType: 16
 --- !u!114 &277268698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1758,7 +1758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 19
+  buttonType: 22
 --- !u!114 &599014153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1895,7 +1895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 10
+  buttonType: 13
 --- !u!114 &612446447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2032,7 +2032,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 5
+  buttonType: 8
 --- !u!114 &705751749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2505,7 +2505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 23
+  buttonType: 26
 --- !u!114 &850719934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2880,7 +2880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 9
+  buttonType: 12
 --- !u!114 &1071919461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3151,7 +3151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 12
+  buttonType: 15
 --- !u!114 &1107790365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4226,7 +4226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 17
+  buttonType: 20
 --- !u!114 &1381033826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4363,7 +4363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 21
+  buttonType: 24
 --- !u!114 &1407696023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4500,7 +4500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 20
+  buttonType: 23
 --- !u!114 &1414104208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4637,7 +4637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 15
+  buttonType: 18
 --- !u!114 &1438583106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4774,7 +4774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 24
+  buttonType: 27
 --- !u!114 &1452182813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5045,7 +5045,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 22
+  buttonType: 25
 --- !u!114 &1616291896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5182,7 +5182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 14
+  buttonType: 17
 --- !u!114 &1688899972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5319,7 +5319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 11
+  buttonType: 14
 --- !u!114 &1815365949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5590,7 +5590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 16
+  buttonType: 19
 --- !u!114 &1879675354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6181,7 +6181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuScript: {fileID: 0}
   radius: 232
-  buttonType: 6
+  buttonType: 9
 --- !u!114 &2145840387
 MonoBehaviour:
   m_ObjectHideFlags: 0

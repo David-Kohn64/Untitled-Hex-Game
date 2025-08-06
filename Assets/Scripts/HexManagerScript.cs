@@ -271,6 +271,7 @@ public class HexManagerScript : MonoBehaviour
     public bool won = false;
     void WinLevelHandler(){
         won = true;
+        AudioManagerScript.Instance.PlaySFX(AudioManagerScript.Instance.win);
         DestroyAllHexes();
         PlayerScript.Instance.playerFacing = 0;
         if (LevelManagerScript.Instance.currentLevel != 20) { LevelManagerScript.Instance.currentLevel++; }

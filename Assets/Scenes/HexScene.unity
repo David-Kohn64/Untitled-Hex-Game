@@ -237,7 +237,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currHexColor: {r: 1, g: 1, b: 1, a: 1}
   prevHexColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverHexColor: {r: 1, g: 1, b: 1, a: 1}
   clickedHexColor: {r: 1, g: 1, b: 1, a: 1}
   delayedActivateHex: {fileID: 0}
   onOnOff: 0
@@ -791,6 +790,26 @@ MonoBehaviour:
   thereIsAPlayer: 0
   isHexOn: 1
   amountKeysLeft: 0
+  colorsUsed:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0, g: 0.41960785, b: 0.23921569, a: 1}
+  - {r: 0, g: 0.41960785, b: 0.23921569, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0, g: 0.45882353, b: 0.85490197, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 0.99215686, g: 0.8784314, b: 0.047058824, a: 1}
+  - {r: 1, g: 0.6901961, b: 0, a: 1}
+  - {r: 0.6039216, g: 0.2509804, b: 0.99607843, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &1698884877
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,7 +1002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae58b817df6bd64e83e2aeec892ae58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 13
+  currentLevel: 20
 --- !u!1 &2095835800
 GameObject:
   m_ObjectHideFlags: 0
