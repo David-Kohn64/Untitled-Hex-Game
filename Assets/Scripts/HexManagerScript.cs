@@ -90,7 +90,7 @@ public class HexManagerScript : MonoBehaviour
             var (currentX, currentY) = current.Key; // Deconstruct the tuple
             GameObject thisHex = current.Value;
             HexScript hexScript = thisHex.GetComponent<HexScript>();
-            SpriteRenderer spriteRenderer = thisHex.GetComponent<SpriteRenderer>();
+            SpriteRenderer spriteRenderer = thisHex.GetComponent<HexScript>().spriteRenderer;
 
             if (hexScript.ccfalling) // checks if ccfalling already true and therefore now destroy hex
             {
@@ -127,7 +127,7 @@ public class HexManagerScript : MonoBehaviour
 
     
     void KeyHexCollectHandler(GameObject hex){
-        SpriteRenderer spriteRenderer = hex.GetComponent<SpriteRenderer>(); 
+        SpriteRenderer spriteRenderer = hex.GetComponent<HexScript>().spriteRenderer; 
         spriteRenderer.color = Color.white;
         currHexColor = Color.white;
         MapMakerScript.Instance.amountKeysLeft--;
@@ -143,7 +143,7 @@ public class HexManagerScript : MonoBehaviour
             foreach (var hex in allHexes)
             {
                 GameObject current = hex.Value;
-                SpriteRenderer spriteRenderer = current.GetComponent<SpriteRenderer>();
+                SpriteRenderer spriteRenderer = current.GetComponent<HexScript>().spriteRenderer;
                 HexScript hexScript = current.GetComponent<HexScript>();
 
                 if (spriteRenderer.color == MapMakerScript.yellow && current.activeSelf)
@@ -161,7 +161,7 @@ public class HexManagerScript : MonoBehaviour
     }
     void EchoHandler(GameObject hex)
     {
-        SpriteRenderer spriteRenderer = hex.GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRenderer = hex.GetComponent<HexScript>().spriteRenderer;
         spriteRenderer.color = prevHexColor;
         currHexColor = spriteRenderer.color;
 
@@ -232,7 +232,7 @@ public class HexManagerScript : MonoBehaviour
         if (onPink == (0,0)){
             foreach (var hex in allHexes){
                 GameObject current = hex.Value;
-                SpriteRenderer spriteRenderer = current.GetComponent<SpriteRenderer>();
+                SpriteRenderer spriteRenderer = current.GetComponent<HexScript>().spriteRenderer;
                 HexScript hexScript = current.GetComponent<HexScript>();
 
                 if (spriteRenderer.color == MapMakerScript.pink){

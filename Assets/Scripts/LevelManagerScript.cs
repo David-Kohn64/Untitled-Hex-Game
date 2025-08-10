@@ -11,7 +11,7 @@ public class LevelManagerScript : MonoBehaviour
 
     void Awake()
     {
-            Instance = this; 
+        Instance = this; 
     }
     // Start is called before the first frame update
     void Start()

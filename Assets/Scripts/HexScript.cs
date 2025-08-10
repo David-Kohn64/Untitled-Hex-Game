@@ -7,12 +7,14 @@ public class HexScript : MonoBehaviour
     public (int x, int y) coordinates;
     private bool mouseIsOn; 
     private float hoverTime = 0f;
+    private Vector2 originalPosition;
+
     private Vector3 originalScale;
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     public bool thisHexIsOn = true;
     void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>(); 
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>(); 
     }
     public void ColorizeHex(Color color) 
     {
@@ -21,7 +23,9 @@ public class HexScript : MonoBehaviour
 
     void Start()
     {
+        originalPosition = transform.localPosition;
         originalScale = transform.localScale;
+
         if (CheckIfPlayerOn())
         {
             HexManagerScript.Instance.currHex = (MapMakerScript.Instance.ToReadablePosition(transform.position.x, "x"), MapMakerScript.Instance.ToReadablePosition(transform.position.y, "y"));
@@ -39,6 +43,10 @@ public class HexScript : MonoBehaviour
             hoverTime += Time.deltaTime * 2f;
             float scaleModifier = 1.0714f + Mathf.Abs(Mathf.Sin(270 + hoverTime) / 14f);
             transform.localScale = originalScale * scaleModifier;
+        }
+        if (ccfalling)
+        {
+            GetComponentInChildren<Animator>().Play("ShakeLess"); 
         }
 
     }
@@ -177,7 +185,7 @@ public class HexScript : MonoBehaviour
 
                     GameObject finalHex = HexManagerScript.Instance.allHexes[candidateHex];
                     HexScript finalHexScript = finalHex.GetComponent<HexScript>();
-                    SpriteRenderer spriteRenderer = finalHex.GetComponent<SpriteRenderer>();
+                    SpriteRenderer spriteRenderer = finalHex.GetComponent<HexScript>().spriteRenderer;
                     HexManagerScript.Instance.currHexColor = spriteRenderer.color;
 
                     HexManagerScript.Instance.delayedActivateHex = finalHex;
@@ -225,14 +233,17 @@ public class HexScript : MonoBehaviour
         
     }
     public int GetPlayerFaceDirection(){
-        if (Mathf.Abs(PlayerScript.Instance.transform.position.x - transform.position.x) < 0.1f){
-            return PlayerScript.Instance.transform.position.y - transform.position.y < 0.1f ? 0 : 180;
+        if (Mathf.Abs(HexManagerScript.Instance.currHex.x - coordinates.x) < 0.1f)
+        {
+            return HexManagerScript.Instance.currHex.y - coordinates.y < 0.1f ? 180 : 0;
         }
-        else if (PlayerScript.Instance.transform.position.x - transform.position.x < 0.1f){
-            return PlayerScript.Instance.transform.position.y - transform.position.y < 0.1f ? 300 : 240;
+        else if (HexManagerScript.Instance.currHex.x - coordinates.x < 0.1f)
+        {
+            return HexManagerScript.Instance.currHex.y - coordinates.y < 0.1f ? 240 : 300;
         }
-        else {
-            return PlayerScript.Instance.transform.position.y - transform.position.y < 0.1f ? 60 : 120;
+        else
+        {
+            return HexManagerScript.Instance.currHex.y - coordinates.y < 0.1f ? 120 : 60;
         }
         
     }

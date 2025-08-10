@@ -9,9 +9,15 @@ public class AudioManagerScript : MonoBehaviour
     [SerializeField] AudioSource SFXSource;
     public AudioClip background;
     public AudioClip win;
-    
+
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -24,6 +30,14 @@ public class AudioManagerScript : MonoBehaviour
     public void PlaySFX(AudioClip clip)
     {
         SFXSource.PlayOneShot(clip);
+    }
+    public void SetMusicVolume(float volume)
+    {
+        musicSource.volume = volume / 100f;
+    }
+    public void SetSFXVolume(float volume)
+    {
+        SFXSource.volume = volume / 100f;
     }
     
 }

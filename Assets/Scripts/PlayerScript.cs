@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour
     public static PlayerScript Instance { get; private set; }
 
     public int playerFacing = 0;
+    [SerializeField] private Transform spriteTransform;
     private (int x, int y) nextHex;
     private void Awake()
     {
@@ -21,18 +22,23 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = Quaternion.identity;
-        transform.Rotate(new Vector3(0, 0, playerFacing));
+        spriteTransform.localRotation = Quaternion.identity;
+        spriteTransform.localRotation = Quaternion.Euler(0, 0, playerFacing);
+
+        if (HexManagerScript.Instance.allHexes.ContainsKey(HexManagerScript.Instance.currHex) && HexManagerScript.Instance.allHexes[HexManagerScript.Instance.currHex].GetComponent<HexScript>().ccfalling)
+        {
+            GetComponentInChildren<Animator>().Play("ShakeLess");
+        }
 
         nextHex = HexManagerScript.Instance.currHex;
         string switchKey = "none";
 
-        if (Input.GetKeyDown(KeyCode.W)) { switchKey = "up";}
-        else if (Input.GetKeyDown(KeyCode.S)) { switchKey = "down";}
-        else if (Input.GetKeyDown(KeyCode.Q)) { switchKey = "upLeft";}
-        else if (Input.GetKeyDown(KeyCode.A)) { switchKey = "downLeft";}
-        else if (Input.GetKeyDown(KeyCode.E)) { switchKey = "upRight";}
-        else if (Input.GetKeyDown(KeyCode.D)) { switchKey = "downRight";}
+        if (Input.GetKeyDown(KeyCode.W)) { switchKey = "up"; }
+        else if (Input.GetKeyDown(KeyCode.S)) { switchKey = "down"; }
+        else if (Input.GetKeyDown(KeyCode.Q)) { switchKey = "upLeft"; }
+        else if (Input.GetKeyDown(KeyCode.A)) { switchKey = "downLeft"; }
+        else if (Input.GetKeyDown(KeyCode.E)) { switchKey = "upRight"; }
+        else if (Input.GetKeyDown(KeyCode.D)) { switchKey = "downRight"; }
         // else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.W)) { switchKey = "upLeft";}
         // else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S)) { switchKey = "downLeft";}
         // else if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.W)) { switchKey = "upRight";}
@@ -43,7 +49,8 @@ public class PlayerScript : MonoBehaviour
         {
             NextHexViaKeyPress(switchKey);
         }
-        if (HexManagerScript.Instance.growthHexes.ContainsKey(nextHex)) {
+        if (HexManagerScript.Instance.growthHexes.ContainsKey(nextHex))
+        {
             HexScript hexScript = HexManagerScript.Instance.growthHexes[nextHex].GetComponent<HexScript>();
             hexScript.OnMouseDown();
         }
@@ -57,7 +64,7 @@ public class PlayerScript : MonoBehaviour
             if (HexManagerScript.Instance.currHexColor == MapMakerScript.purple)
             {
                 int safety = 8;
-                while ((!HexManagerScript.Instance.allHexes.ContainsKey(nextHex) || (HexManagerScript.Instance.allHexes.ContainsKey(nextHex) && HexManagerScript.Instance.allHexes[nextHex].GetComponent<SpriteRenderer>().color != MapMakerScript.purple)) && safety > 0)
+                while ((!HexManagerScript.Instance.allHexes.ContainsKey(nextHex) || (HexManagerScript.Instance.allHexes.ContainsKey(nextHex) && HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>().spriteRenderer.color != MapMakerScript.purple)) && safety > 0)
                 {
                     NextHexViaKeyPress(switchKey);
                     safety--;
@@ -108,11 +115,31 @@ public class PlayerScript : MonoBehaviour
     }
     public void Move(float newX, float newY)
     {
-        transform.position = new Vector3(newX, newY, transform.position.z);
+        GetComponentInChildren<Animator>().Play("Idle");
+        //StopAllCoroutines();
+
+        Vector3 targetPos = new Vector3(newX, newY, transform.position.z);
+        transform.position = targetPos;
+        //StartCoroutine(MoveSmooth(targetPos));
     }
     public void Move((int x, int y) newXY)
     {
-        transform.position = new Vector3(MapMakerScript.Instance.ToUnityPosition(newXY.x, "x"), MapMakerScript.Instance.ToUnityPosition(newXY.y, "y"), transform.position.z);
+        GetComponentInChildren<Animator>().Play("Idle");
+        //StopAllCoroutines();
+
+        Vector3 targetPos = new Vector3(MapMakerScript.Instance.ToUnityPosition(newXY.x, "x"), MapMakerScript.Instance.ToUnityPosition(newXY.y, "y"), transform.position.z);
+        transform.position = targetPos;
+        //StartCoroutine(MoveSmooth(targetPos));
+    }
+    private IEnumerator MoveSmooth(Vector3 targetPos)
+    {
+        float speed = 10f; 
+        while (Vector3.Distance(transform.position, targetPos) > 0.01f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+            yield return null;
+        }
+        transform.position = targetPos;
     }
     public void Fell()
     {
