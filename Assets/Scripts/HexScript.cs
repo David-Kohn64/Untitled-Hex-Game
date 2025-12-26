@@ -12,6 +12,8 @@ public class HexScript : MonoBehaviour
     private Vector3 originalScale;
     public SpriteRenderer spriteRenderer;
     public bool thisHexIsOn = true;
+
+    public int levelcodeIndex = -1;
     void Awake()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>(); 
@@ -82,6 +84,11 @@ public class HexScript : MonoBehaviour
     public void OnMouseDown()
     {
         if (CheckIfClickable()){
+            MapMakerScript.Instance.undoStack.Push(MapMakerScript.Instance.Encode());
+            Debug.Log("PUSHING: " + MapMakerScript.Instance.Encode() + "Triggered By: " + System.Environment.StackTrace);
+            transform.localScale = originalScale;
+            mouseIsOn = false;
+            hoverTime = 0f;
             PlayerScript.Instance.playerFacing = GetPlayerFaceDirection();
             HexManagerScript.Instance.prevHex = HexManagerScript.Instance.currHex;
             HexManagerScript.Instance.prevHexColor = HexManagerScript.Instance.currHexColor;
@@ -95,8 +102,6 @@ public class HexScript : MonoBehaviour
             }
             Activate();
             CheckIfLost();
-            transform.localScale = originalScale;
-            mouseIsOn = false;
         }
     }
     public bool ccfalling = false;
@@ -156,7 +161,7 @@ public class HexScript : MonoBehaviour
         if (HexManagerScript.Instance.currHexColor == MapMakerScript.purple && spriteRenderer.color == MapMakerScript.purple){
             GetUnit(); 
             candidatePad = HexManagerScript.Instance.currHex;
-            for (int i = 0; i <= 2 * MapMakerScript.Instance.mapComplexity + 1; i++){
+            for (int i = 0; i <= 2 * MapMakerScript.COMPLEXITY + 1; i++){
                 candidatePad.x += unit.x;
                 candidatePad.y += unit.y;
                 if (!HexManagerScript.Instance.allHexes.ContainsKey(candidatePad)){
@@ -190,7 +195,7 @@ public class HexScript : MonoBehaviour
 
                     HexManagerScript.Instance.delayedActivateHex = finalHex;
 
-                    PlayerScript.Instance.Move((candidateHex.x - MapMakerScript.Instance.mapComplexity) * MapMakerScript.xUnit, ((MapMakerScript.Instance.mapComplexity * 2) - candidateHex.y) * MapMakerScript.yUnit);
+                    PlayerScript.Instance.Move((candidateHex.x - MapMakerScript.COMPLEXITY) * MapMakerScript.xUnit, ((MapMakerScript.COMPLEXITY* 2) - candidateHex.y) * MapMakerScript.yUnit);
                     return;
                 }
                 safety--;

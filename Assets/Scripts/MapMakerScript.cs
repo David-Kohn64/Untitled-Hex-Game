@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
+using static UnityEngine.Mathf;
 
 public class MapMakerScript : MonoBehaviour
 {
+    public const int COMPLEXITY = 3;
     public static MapMakerScript Instance { get; private set; }
     [SerializeField] public GameObject hex;
 
     [SerializeField] public GameObject hexOff;
     [SerializeField] public GameObject player;
-
-    public int mapComplexity = 3;  //Should be set by levelManager and not right now
-    public int currMapComplexity;
 
     public static float xUnit = 1.2f; //Units of distance between hexes
     public static float yUnit = 0.7f; //Units of distance between hexes
@@ -39,6 +39,37 @@ public class MapMakerScript : MonoBehaviour
     };
     public System.Random random = new System.Random();
     private bool firstHex = true;
+    public int currentLevel;
+    public string levelcode = "0000000000000000000000000000000000000000"; // length: 40
+    private int currentHexIndex = 0;
+    private int playerSpawnIndex = 37;
+    public Stack<string> undoStack = new Stack<string>();
+
+    private Dictionary<string, Color> levelcodeToColor = new Dictionary<string, Color>()
+    {
+        { "0", Color.black }, //no tile
+        { "1", Color.white },
+        { "2", green},
+        { "3", blue}, 
+        { "4", blue }, //ccfalling
+        { "5", purple },
+        { "6", yellow}, //on
+        { "7", yellow}, //off
+        { "8", orange }, 
+        { "9", red }, 
+        { "A", red }, //temporary
+    };
+
+    private Dictionary<(int x, int y), int> hexToLevelcodeIndex = new Dictionary<(int x, int y), int>()
+{
+    { (0, 3), 0 }, { (0, 5), 1 }, { (0, 7), 2 }, { (0, 9), 3 },
+    { (1, 2), 4 }, { (1, 4), 5 }, { (1, 6), 6 }, { (1, 8), 7 }, { (1, 10), 8 },
+    { (2, 1), 9 }, { (2, 3), 10 }, { (2, 5), 11 }, { (2, 7), 12 }, { (2, 9), 13 },{ (2, 11), 14 },
+    { (3, 0), 15 }, { (3, 2), 16 }, { (3, 4), 17 }, { (3, 6), 18 }, { (3, 8), 19 }, { (3, 10), 20 }, { (3, 12), 21 },
+    { (4, 1), 22 }, { (4, 3), 23 }, { (4, 5), 24 }, { (4, 7), 25 }, { (4, 9), 26 }, { (4, 11), 27 },
+    { (5, 2), 28 }, { (5, 4), 29 }, { (5, 6), 30 }, { (5, 8), 31 }, { (5, 10), 32 },
+    { (6, 3), 33 }, { (6, 5), 34 }, { (6, 7), 35 }, { (6, 9), 36 }
+};
 
     void Awake()
     {
@@ -47,7 +78,9 @@ public class MapMakerScript : MonoBehaviour
 
     void Start()
     {
-
+        if (HexManagerScript.Instance.allHexes.Count == 0){
+            SetLevel(currentLevel);
+        }
     }
 
     // Update is called once per frame
@@ -55,64 +88,49 @@ public class MapMakerScript : MonoBehaviour
     {
 
     }
-
-    public void MakeMap(int mapComplexity)
+    public void SetLevel(int level)
     {
-        currMapComplexity = mapComplexity;
-        originXPosition = -1 * xUnit * mapComplexity; //Unity x-coordinate of where origin should be
-        originYPosition = yUnit * mapComplexity; //Unity y-coordinate of where origin should be
+        currentLevel = level;
+        levelcode = LevelData.Instance.levelcodes[currentLevel - 1];
+        MakeMap(levelcode);
+    }
 
-        if (thereIsAPlayer == false)
+    public void MakeMap(string givenLevelcode)
+    {
+        levelcode = givenLevelcode;
+        CreatePlayer();
+
+        foreach (var hex in hexToLevelcodeIndex)
         {
-            CreatePlayer(LevelManagerScript.Instance.spawnPoint);
-            thereIsAPlayer = true;
-        }
-        else
-        {
-            PlayerScript.Instance.Move(LevelManagerScript.Instance.spawnPoint);
-        }
-        float xPosition = originXPosition;
-        float yPosition = originYPosition;
-        int tileAmount = mapComplexity;
-
-        for (int i = 1; i <= (mapComplexity * 2) + 1; i++) //columns
-        {
-
-            for (int j = 0; j <= tileAmount; j++) //rows
-            {
-                CreateHex(xPosition, yPosition);
-                yPosition -= 2 * yUnit;
-            }
-            xPosition += xUnit;
-            if (i <= mapComplexity)
-            {
-                yPosition = originYPosition + (i * yUnit);
-                tileAmount += 1;
-            }
-            if (i > mapComplexity)
-            {
-                yPosition = originYPosition + ((mapComplexity - (i - mapComplexity)) * yUnit);
-                tileAmount -= 1;
-            }
-
+            currentHexIndex = hex.Value;
+            CreateHex(hex.Key.x, hex.Key.y);
         }
     }
 
-    private void CreateHex(float unityXPos, float unityYPos)
+    private void CreateHex(int xReadablePos, int yReadablePos)
     {
-        xReadablePos = ToReadablePosition(unityXPos, "x");
-        yReadablePos = ToReadablePosition(unityYPos, "y");
+        float unityXPos = ToUnityPosition(xReadablePos, "x");
+        float unityYPos = ToUnityPosition(yReadablePos, "y");
+        Color color = DetermineColor();
 
-        Color color = DetermineColor(LevelManagerScript.Instance.currentLevel);
+        string tileFlag = GetFlagFromCode();
 
-        if (color != Color.black)
+        if (tileFlag == "tempGrowth")
+        {
+            HexManagerScript.Instance.growthHexes.Add((xReadablePos, yReadablePos), CreateNewHex((xReadablePos, yReadablePos), color));
+        }
+        else if (color != Color.black)
         {
             GameObject hexInstance = Instantiate(hex, new Vector3(unityXPos, unityYPos, 0), transform.rotation);
             HexScript hexScript = hexInstance.GetComponent<HexScript>();
             hexScript.coordinates = (xReadablePos, yReadablePos);
             hexScript.ColorizeHex(color);
-
-            if (color == yellow || color == pink)
+            
+            if (tileFlag == "ccfalling")
+            {
+                hexScript.ccfalling = true;
+            }
+            if (color == yellow)
             {
                 CreateHexOff(unityXPos, unityYPos, color);
                 if (isHexOn == false)
@@ -146,122 +164,121 @@ public class MapMakerScript : MonoBehaviour
         hexScript.ColorizeHex(color);
         HexManagerScript.Instance.onOffHexes.Add((ToReadablePosition(unityXPos, "x"), ToReadablePosition(unityYPos, "y")), hexOffInstance);
     }
-    private void CreatePlayer((int x, int y) spawnPoint)
+    private void CreatePlayer()
     {
-        Instantiate(player, new Vector3(ToUnityPosition(spawnPoint.x, "x"), ToUnityPosition(spawnPoint.y, "y"), -1), transform.rotation);
+        int playerXCoordinate = levelcode[playerSpawnIndex] - '0';
+        int playerYCoordinate = int.Parse(levelcode.Substring(playerSpawnIndex + 1, 2));
+        if (thereIsAPlayer)
+        {
+            PlayerScript.Instance.Move(ToUnityPosition(playerXCoordinate, "x"), ToUnityPosition(playerYCoordinate, "y"));
+        }
+        else {
+            Instantiate(player, new Vector3(ToUnityPosition(playerXCoordinate, "x"), ToUnityPosition(playerYCoordinate, "y"), -1), transform.rotation);
+        }
+        thereIsAPlayer = true;
     }
 
-    private Color DetermineColor(int Level)
+    private string GetLevelCode()
     {
-        switch (Level)
+        return LevelData.Instance.levelcodes[currentLevel - 1];
+    }
+    private Color DetermineColor() 
+    {
+        if (currentLevel == 20) //Infinite (TODO: create random levelcode)
         {
-            case 1:
-                return GetColorFromLists(LevelData.Instance.colorsUsedBuddingPath, LevelData.Instance.allColorArraysBuddingPath);
-            case 2:
-                return GetColorFromLists(LevelData.Instance.colorsUsedCeruleanStep, LevelData.Instance.allColorArraysCeruleanStep);
-            case 3:
-                return GetColorFromLists(LevelData.Instance.colorsUsedVioletLaunch, LevelData.Instance.allColorArraysVioletLaunch);
-            case 4:
-                return GetColorFromLists(LevelData.Instance.colorsUsedInterception, LevelData.Instance.allColorArraysInterception);
-            case 5:
-                return GetColorFromLists(LevelData.Instance.colorsUsedIslandHopping, LevelData.Instance.allColorArraysIslandHopping);
-            case 6:
-                return GetColorFromLists(LevelData.Instance.colorsUsedChainingCommand, LevelData.Instance.allColorArraysChainingCommand);
-            case 7:
-                return GetColorFromLists(LevelData.Instance.colorsUsedGoldenToggle, LevelData.Instance.allColorArraysGoldenToggle, LevelData.Instance.yellowTilesOffGoldenToggle);
-            case 8:
-                return GetColorFromLists(LevelData.Instance.colorsUsedCrissCross, LevelData.Instance.allColorArraysCrissCross, LevelData.Instance.yellowTilesOffCrissCross);
-            case 9:
-                return GetColorFromLists(LevelData.Instance.colorsUsedCaptainsWheel, LevelData.Instance.allColorArraysCaptainsWheel, LevelData.Instance.yellowTilesOffCaptainsWheel);
-            case 10:
-                return GetColorFromLists(LevelData.Instance.colorsUsedBurnout, LevelData.Instance.allColorArraysBurnout, LevelData.Instance.yellowTilesOffBurnout);
-            case 11:
-                return GetColorFromLists(LevelData.Instance.colorsUsedEcholocation, LevelData.Instance.allColorArraysEcholocation, LevelData.Instance.yellowTilesOffEcholocation);
-            case 12:
-                return GetColorFromLists(LevelData.Instance.colorsUsedStarburst, LevelData.Instance.allColorArraysStarburst, LevelData.Instance.yellowTilesOffStarburst);
-            case 13:
-                return GetColorFromLists(LevelData.Instance.colorsUsedAngelWings, LevelData.Instance.allColorArraysAngelWings, LevelData.Instance.yellowTilesOffAngelWings);
-            case 14:
-                return GetColorFromLists(LevelData.Instance.colorsUsedTurtle, LevelData.Instance.allColorArraysTurtle, LevelData.Instance.yellowTilesOffTurtle);
-            case 15:
-                return GetColorFromLists(LevelData.Instance.colorsUsedRedRising, LevelData.Instance.allColorArraysRedRising, LevelData.Instance.yellowTilesOffRedRising);
-            case 16:
-                return GetColorFromLists(LevelData.Instance.colorsUsedReconnect, LevelData.Instance.allColorArraysReconnect, LevelData.Instance.yellowTilesOffReconnect);
-            case 17:
-                return GetColorFromLists(LevelData.Instance.colorsUsedJellyDonut, LevelData.Instance.allColorArraysJellyDonut, LevelData.Instance.yellowTilesOffJellyDonut);
-            case 18:
-                return GetColorFromLists(LevelData.Instance.colorsUsedCulmination, LevelData.Instance.allColorArraysCulmination, LevelData.Instance.yellowTilesOffCulmination);
-
-            case 21:
-                return GetColorFromLists(LevelData.Instance.colorsUsedLevel21, LevelData.Instance.allColorArraysLevel21, LevelData.Instance.yellowTilesOffLevel21, LevelData.Instance.pinkTilesOffLevel21);
-            case 20:
-                int randomColor = random.Next(0, 19);
-                if (firstHex && randomColor > 15) {randomColor = random.Next(0, 15);}
-                Color returnRandomColor = colorsUsed[randomColor];
-                if (returnRandomColor == yellow)
+            int randomColor = random.Next(0, 19);
+            if (firstHex && randomColor > 15) {randomColor = random.Next(0, 15);}
+            Color returnRandomColor = colorsUsed[randomColor];
+            if (returnRandomColor == yellow)
+            {
+                int sixtySixPercent = random.Next(0, 3);
+                if (sixtySixPercent == 2 && !firstHex)
                 {
-                    int sixtySixPercent = random.Next(0, 3);
-                    if (sixtySixPercent == 2 && !firstHex)
-                    {
-                        isHexOn = !isHexOn;
-                    }
+                    isHexOn = !isHexOn;
                 }
-                firstHex = false;
-                return returnRandomColor;
+            }
+            firstHex = false;
+            return returnRandomColor;
+        }
+        else
+        {
+            return GetColorFromCode();
+        }
+    }
+    private Color GetColorFromCode()
+    {
+        string levelcodeBit = levelcode[currentHexIndex].ToString();
+        return levelcodeToColor[levelcodeBit];
+    }
+    private string GetFlagFromCode()
+    {
+        string levelcodeBit = levelcode[currentHexIndex].ToString();
+        switch (levelcodeBit)
+        {
+            case "4":
+                return "ccfalling";
+            case "7":
+                isHexOn = false;
+                return "off";
+            case "A":
+                return "tempGrowth";
             default:
-                Debug.LogWarning("Level not implemented");
-                return Color.white;
-
-        }
+                return null;
+        } 
     }
-    private Color GetColorFromLists(Color[] colorsUsed, (int, int)[][] allColors, (int, int)[] yellowTilesOff, (int, int)[] pinkTilesOff)
+    public string Encode()
     {
-        const float tolerance = 0.01f;
-        for (int j = 0; j < allColors.Length; j++)
-        {
-            for (int k = 0; k < allColors[j].Length; k++)
-            {
-                (int a, int b) = allColors[j][k];
-                if (Mathf.Abs(a - xReadablePos) < tolerance && Mathf.Abs(b - yReadablePos) < tolerance)
-                {
+        StringBuilder levelcode = new StringBuilder("0000000000000000000000000000000000000000"); // length: 40
 
-                    if (allColors[j] == yellowTilesOff || allColors[j] == pinkTilesOff)
-                    { //for yellow On/Off tiles
-                        isHexOn = false;
-                    }
-                    return colorsUsed[j];
-                }
-            }
-        }
-        return Color.black; //This means do not create hex!
-    }
-    private Color GetColorFromLists(Color[] colorsUsed, (int, int)[][] allColors, (int, int)[] yellowTilesOff) { return GetColorFromLists(colorsUsed, allColors, yellowTilesOff, yellowTilesOff); }
-    private Color GetColorFromLists(Color[] colorsUsed, (int, int)[][] allColors)
-    {
-        const float tolerance = 0.01f;
-        for (int j = 0; j < allColors.Length; j++)
+        foreach( var hex in HexManagerScript.Instance.allHexes)
         {
-            for (int k = 0; k < allColors[j].Length; k++)
+            char levelcodeBit = '0';
+            HexScript hexScript = hex.Value.GetComponent<HexScript>();
+            Color col = hexScript.spriteRenderer.color;
+
+            if (col == Color.white) levelcodeBit = '1';
+            else if (col == MapMakerScript.green)  levelcodeBit = '2';
+            else if (col == MapMakerScript.blue) 
             {
-                (int a, int b) = allColors[j][k];
-                if (Mathf.Abs(a - xReadablePos) < tolerance && Mathf.Abs(b - yReadablePos) < tolerance)
-                {
-                    return colorsUsed[j];
-                }
+                levelcodeBit = !hexScript.ccfalling ? '3' : '4';
             }
+            else if (col == MapMakerScript.purple) levelcodeBit = '5';
+            else if (col == MapMakerScript.yellow)
+            {
+                levelcodeBit = hexScript.thisHexIsOn ? '6' : '7';
+            }
+            else if (col == MapMakerScript.orange) levelcodeBit = '8';
+            else if (col == MapMakerScript.red)    levelcodeBit = '9';
+
+            levelcode[hexToLevelcodeIndex[hex.Key]] = levelcodeBit;
         }
-        return Color.black; //This means do not create hex!
+        foreach( var hex in HexManagerScript.Instance.growthHexes)
+        {
+            levelcode[hexToLevelcodeIndex[hex.Key]] = 'A';
+        }
+
+        if (thereIsAPlayer)
+        {
+            int playerXCoord = ToReadablePosition(PlayerScript.Instance.transform.position.x, "x");
+            int playerYCoord = ToReadablePosition(PlayerScript.Instance.transform.position.y, "y");
+            levelcode[playerSpawnIndex] = (char)(playerXCoord + '0');
+            levelcode[playerSpawnIndex + 1] = (char)(Mathf.Floor(playerYCoord / 10) + '0');
+            levelcode[playerSpawnIndex + 2] = (char)(playerYCoord % 10 +'0');
+        }
+
+        return levelcode.ToString();
     }
+
 
     public int ToReadablePosition(float unityPos, string axis)
     {
         if (axis.Equals("x"))
         {
-            return (int)Mathf.Round(mapComplexity + (unityPos / xUnit));
+            return (int)Mathf.Round(COMPLEXITY + (unityPos / xUnit));
         }
         else
         { //y-axis
-            return (int)Mathf.Round((mapComplexity * 2) - (unityPos / yUnit));
+            return (int)Mathf.Round((COMPLEXITY * 2) - (unityPos / yUnit));
         }
     }
 
@@ -269,11 +286,11 @@ public class MapMakerScript : MonoBehaviour
     {
         if (axis.Equals("x"))
         {
-            return (readablePos - mapComplexity) * xUnit;
+            return (readablePos - COMPLEXITY) * xUnit;
         }
         else
         { //y-axis
-            return (mapComplexity * 2 - readablePos) * yUnit;
+            return (COMPLEXITY * 2 - readablePos) * yUnit;
         }
     }
 }

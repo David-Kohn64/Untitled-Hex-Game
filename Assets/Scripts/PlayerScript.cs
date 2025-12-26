@@ -30,9 +30,7 @@ public class PlayerScript : MonoBehaviour
             GetComponentInChildren<Animator>().Play("ShakeLess");
         }
 
-        nextHex = HexManagerScript.Instance.currHex;
         string switchKey = "none";
-
         if (Input.GetKeyDown(KeyCode.W)) { switchKey = "up"; }
         else if (Input.GetKeyDown(KeyCode.S)) { switchKey = "down"; }
         else if (Input.GetKeyDown(KeyCode.Q)) { switchKey = "upLeft"; }
@@ -43,39 +41,42 @@ public class PlayerScript : MonoBehaviour
         // else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S)) { switchKey = "downLeft";}
         // else if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.W)) { switchKey = "upRight";}
         // else if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.S)) { switchKey = "downRight";}
-
+        
 
         if (switchKey != "none")
         {
+            nextHex = HexManagerScript.Instance.currHex;
             NextHexViaKeyPress(switchKey);
-        }
-        if (HexManagerScript.Instance.growthHexes.ContainsKey(nextHex))
-        {
-            HexScript hexScript = HexManagerScript.Instance.growthHexes[nextHex].GetComponent<HexScript>();
-            hexScript.OnMouseDown();
-        }
-        if (HexManagerScript.Instance.allHexes.ContainsKey(nextHex) && HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>().thisHexIsOn)
-        {
-            HexScript hexScript = HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>();
-            hexScript.OnMouseDown();
-        }
-        else
-        {
-            if (HexManagerScript.Instance.currHexColor == MapMakerScript.purple)
+
+            if (HexManagerScript.Instance.growthHexes.ContainsKey(nextHex))
             {
-                int safety = 8;
-                while ((!HexManagerScript.Instance.allHexes.ContainsKey(nextHex) || (HexManagerScript.Instance.allHexes.ContainsKey(nextHex) && HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>().spriteRenderer.color != MapMakerScript.purple)) && safety > 0)
+                HexScript hexScript = HexManagerScript.Instance.growthHexes[nextHex].GetComponent<HexScript>();
+                hexScript.OnMouseDown();
+            }
+            if (HexManagerScript.Instance.allHexes.ContainsKey(nextHex) && HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>().thisHexIsOn)
+            {
+                HexScript hexScript = HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>();
+                hexScript.OnMouseDown();
+            }
+            else
+            {
+                if (HexManagerScript.Instance.currHexColor == MapMakerScript.purple)
                 {
-                    NextHexViaKeyPress(switchKey);
-                    safety--;
-                }
-                if (safety > 0)
-                {
-                    HexScript hexScript = HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>();
-                    hexScript.OnMouseDown();
+                    int safety = 8;
+                    while ((!HexManagerScript.Instance.allHexes.ContainsKey(nextHex) || (HexManagerScript.Instance.allHexes.ContainsKey(nextHex) && HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>().spriteRenderer.color != MapMakerScript.purple)) && safety > 0)
+                    {
+                        NextHexViaKeyPress(switchKey);
+                        safety--;
+                    }
+                    if (safety > 0)
+                    {
+                        HexScript hexScript = HexManagerScript.Instance.allHexes[nextHex].GetComponent<HexScript>();
+                        hexScript.OnMouseDown();
+                    }
                 }
             }
         }
+        
     }
     public void NextHexViaKeyPress(string switchKey)
     {

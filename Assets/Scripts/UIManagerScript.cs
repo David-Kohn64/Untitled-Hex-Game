@@ -21,26 +21,36 @@ public class UIManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentLevel = LevelManagerScript.Instance.currentLevel;
-        levelName.text = "Level " + LevelManagerScript.Instance.currentLevel;
-        if (LevelManagerScript.Instance.currentLevel == 20) { levelName.text = "Infinite"; }
+        currentLevel = MapMakerScript.Instance.currentLevel;
+        levelName.text = "Level " + MapMakerScript.Instance.currentLevel;
+        if (MapMakerScript.Instance.currentLevel == 20) { levelName.text = "Infinite"; }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             RestartLevel();
         }
     }
-
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadSceneAsync("Main Menu");
+    }
     public void RestartLevel()
     {
         SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>
         {
-            LevelManagerScript.Instance.SetLevel(currentLevel);
+            MapMakerScript.Instance.undoStack.Clear();
+            MapMakerScript.Instance.SetLevel(currentLevel);
         };
     }
-    public void LoadMainMenu()
+    public void UndoMove()
     {
-        SceneManager.LoadSceneAsync("Main Menu");
+        if (MapMakerScript.Instance.undoStack.Count > 0)
+        {
+            string lastState = MapMakerScript.Instance.undoStack.Pop();
+            Debug.Log("RETURNING TO: " + lastState);
+            HexManagerScript.Instance.DestroyAllHexes();
+            MapMakerScript.Instance.MakeMap(lastState);
+        }
     }
 
 }

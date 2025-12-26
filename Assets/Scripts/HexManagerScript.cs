@@ -46,11 +46,11 @@ public class HexManagerScript : MonoBehaviour
         }
         onOffHexes.Clear();
 
-        //foreach (var hex in growthHexes)
-        //{
-        //    Destroy(hex.Value);
-        //}
-        //growthHexes.Clear();
+        foreach (var hex in growthHexes)
+        {
+           Destroy(hex.Value);
+        }
+        growthHexes.Clear();
         
     }
     public void ProcessPassiveStep()
@@ -217,10 +217,10 @@ public class HexManagerScript : MonoBehaviour
     bool CheckInBounds((int x, int y) nextCurr)
     {
         if (nextCurr.x < 0 || nextCurr.y < 0) { return false; }
-        if (Mathf.Abs(3 - nextCurr.x) > MapMakerScript.Instance.currMapComplexity) { return false; }
-        if (Mathf.Abs(6 - nextCurr.y) > MapMakerScript.Instance.currMapComplexity * 2) { return false; }
-        if (Mathf.Abs(9 - (nextCurr.x + nextCurr.y)) > MapMakerScript.Instance.currMapComplexity * 2) { return false; }
-        if (Mathf.Abs(3 - nextCurr.x) + Mathf.Abs(6 - nextCurr.y) > MapMakerScript.Instance.currMapComplexity * 2) { return false; }
+        if (Mathf.Abs(3 - nextCurr.x) > MapMakerScript.COMPLEXITY) { return false; }
+        if (Mathf.Abs(6 - nextCurr.y) > MapMakerScript.COMPLEXITY * 2) { return false; }
+        if (Mathf.Abs(9 - (nextCurr.x + nextCurr.y)) > MapMakerScript.COMPLEXITY * 2) { return false; }
+        if (Mathf.Abs(3 - nextCurr.x) + Mathf.Abs(6 - nextCurr.y) > MapMakerScript.COMPLEXITY * 2) { return false; }
         return true;
     }
 
@@ -274,8 +274,9 @@ public class HexManagerScript : MonoBehaviour
         AudioManagerScript.Instance.PlaySFX(AudioManagerScript.Instance.win);
         DestroyAllHexes();
         PlayerScript.Instance.playerFacing = 0;
-        if (LevelManagerScript.Instance.currentLevel != 20) { LevelManagerScript.Instance.currentLevel++; }
-        LevelManagerScript.Instance.SetLevel(LevelManagerScript.Instance.currentLevel);
+        MapMakerScript.Instance.undoStack.Clear();
+        if (MapMakerScript.Instance.currentLevel != 20) { MapMakerScript.Instance.currentLevel++; }
+        MapMakerScript.Instance.SetLevel(MapMakerScript.Instance.currentLevel);
     }
 
 }
