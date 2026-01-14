@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using static UnityEngine.Mathf;
+using UnityEngine.SceneManagement;
 
 public class MapMakerScript : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class MapMakerScript : MonoBehaviour
     [SerializeField] public GameObject hex;
 
     [SerializeField] public GameObject hexOff;
+    [SerializeField] public GameObject borderHex;
+    [SerializeField] public GameObject editorHex;
     [SerializeField] public GameObject player;
 
     public static float xUnit = 1.2f; //Units of distance between hexes
@@ -41,9 +44,11 @@ public class MapMakerScript : MonoBehaviour
     private bool firstHex = true;
     public int currentLevel;
     public string levelcode = "0000000000000000000000000000000000000000"; // length: 40
+    public const int CODE_LENGTH = 40;
     private int currentHexIndex = 0;
     private int playerSpawnIndex = 37;
     public Stack<string> undoStack = new Stack<string>();
+    public bool isEditor = false;
 
     private Dictionary<string, Color> levelcodeToColor = new Dictionary<string, Color>()
     {
@@ -91,7 +96,15 @@ public class MapMakerScript : MonoBehaviour
     public void SetLevel(int level)
     {
         currentLevel = level;
-        levelcode = LevelData.Instance.levelcodes[currentLevel - 1];
+        if (level >= 1000) //Editor
+        {
+            levelcode = LevelData.Instance.editorLevelcodes[currentLevel - 1000];
+            isEditor = true;
+        }
+        else
+        {
+            levelcode = LevelData.Instance.levelcodes[currentLevel - 1];
+        }
         MakeMap(levelcode);
     }
 
@@ -99,32 +112,52 @@ public class MapMakerScript : MonoBehaviour
     {
         levelcode = givenLevelcode;
         CreatePlayer();
+        amountKeysLeft = 0; //reset green key count 
 
         foreach (var hex in hexToLevelcodeIndex)
         {
             currentHexIndex = hex.Value;
-            CreateHex(hex.Key.x, hex.Key.y);
+            CreateHex(ToVector(hex.Key));
+            if (isEditor) //Bulids the borderHexes for thw workspace panel
+            {
+                GameObject borderHexInstance = Instantiate(borderHex, ToVector(hex.Key), transform.rotation);
+                borderHexInstance.transform.SetParent(EditorManagerScript.Instance.workspacePanel.transform);
+            }
         }
     }
 
-    private void CreateHex(int xReadablePos, int yReadablePos)
+    public void CreateHex(Vector3 worldPosition, Color? givenColor = null)
     {
-        float unityXPos = ToUnityPosition(xReadablePos, "x");
-        float unityYPos = ToUnityPosition(yReadablePos, "y");
-        Color color = DetermineColor();
+        (int x, int y) simpleCoords = ToSimpleCoords(worldPosition);
+        Color color;
+        string tileFlag = "";
 
-        string tileFlag = GetFlagFromCode();
+        if (givenColor == null)
+        {
+            color = DetermineColor();
+            tileFlag = GetFlagFromCode();
+        }
+        else
+        {
+            color = givenColor.Value;
+        }
 
         if (tileFlag == "tempGrowth")
         {
-            HexManagerScript.Instance.growthHexes.Add((xReadablePos, yReadablePos), CreateNewHex((xReadablePos, yReadablePos), color));
+            HexManagerScript.Instance.growthHexes.Add(simpleCoords, CreateNewHex(worldPosition, color));
         }
         else if (color != Color.black)
         {
-            GameObject hexInstance = Instantiate(hex, new Vector3(unityXPos, unityYPos, 0), transform.rotation);
+            GameObject hexInstance = Instantiate(hex, worldPosition, transform.rotation);
+            hexInstance.transform.SetParent(this.transform);
             HexScript hexScript = hexInstance.GetComponent<HexScript>();
-            hexScript.coordinates = (xReadablePos, yReadablePos);
+            hexScript.coordinates = simpleCoords;
             hexScript.ColorizeHex(color);
+
+            if (!HexManagerScript.Instance.allHexes.ContainsKey(simpleCoords))
+            {
+                HexManagerScript.Instance.allHexes.Add(simpleCoords, hexInstance);
+            }
             
             if (tileFlag == "ccfalling")
             {
@@ -132,7 +165,7 @@ public class MapMakerScript : MonoBehaviour
             }
             if (color == yellow)
             {
-                CreateHexOff(unityXPos, unityYPos, color);
+                CreateHexOff(worldPosition, color);
                 if (isHexOn == false)
                 {
                     isHexOn = true;
@@ -145,35 +178,42 @@ public class MapMakerScript : MonoBehaviour
             {
                 amountKeysLeft++;
             }
-            HexManagerScript.Instance.allHexes.Add((xReadablePos, yReadablePos), hexInstance);
         }
     }
-    public GameObject CreateNewHex((int xReadablePos, int yReadablePos) newHex, Color color)
+    public GameObject CreateNewHex(Vector3 worldPosition, Color color)
     {
-        GameObject hexInstance = Instantiate(hex, new Vector3(ToUnityPosition(newHex.xReadablePos, "x"), ToUnityPosition(newHex.yReadablePos, "y"), 0), transform.rotation);
+        (int x, int y) simpleCoords = ToSimpleCoords(worldPosition);
+        GameObject hexInstance = Instantiate(hex, worldPosition, transform.rotation);
+        hexInstance.transform.SetParent(this.transform);
         HexScript hexScript = hexInstance.GetComponent<HexScript>();
-        hexScript.coordinates = (newHex.xReadablePos, newHex.yReadablePos);
+        hexScript.coordinates = simpleCoords;
         hexScript.ColorizeHex(color);
         return hexInstance;
-
     }
-    public void CreateHexOff(float unityXPos, float unityYPos, Color color)
+    public void CreateHexOff(Vector3 worldPosition, Color color)
     {
-        GameObject hexOffInstance = Instantiate(hexOff, new Vector3(unityXPos, unityYPos, 0), transform.rotation);
+        (int x, int y) simpleCoords = ToSimpleCoords(worldPosition);
+        GameObject hexOffInstance = Instantiate(hexOff, worldPosition, transform.rotation);
+        hexOffInstance.transform.SetParent(this.transform);
         HexScript hexScript = hexOffInstance.GetComponent<HexScript>();
         hexScript.ColorizeHex(color);
-        HexManagerScript.Instance.onOffHexes.Add((ToReadablePosition(unityXPos, "x"), ToReadablePosition(unityYPos, "y")), hexOffInstance);
+        if (!HexManagerScript.Instance.onOffHexes.ContainsKey(simpleCoords))
+            {
+                HexManagerScript.Instance.onOffHexes.Add(simpleCoords, hexOffInstance);
+            }
     }
     private void CreatePlayer()
     {
         int playerXCoordinate = levelcode[playerSpawnIndex] - '0';
         int playerYCoordinate = int.Parse(levelcode.Substring(playerSpawnIndex + 1, 2));
+        Vector3 worldPosition = ToVector((playerXCoordinate, playerYCoordinate));
         if (thereIsAPlayer)
         {
-            PlayerScript.Instance.Move(ToUnityPosition(playerXCoordinate, "x"), ToUnityPosition(playerYCoordinate, "y"));
+            PlayerScript.Instance.Move(worldPosition);
         }
         else {
-            Instantiate(player, new Vector3(ToUnityPosition(playerXCoordinate, "x"), ToUnityPosition(playerYCoordinate, "y"), -1), transform.rotation);
+            GameObject playerInstance = Instantiate(player, worldPosition, transform.rotation); //maybe make z:-1
+            playerInstance.transform.SetParent(this.transform);
         }
         thereIsAPlayer = true;
     }
@@ -237,18 +277,18 @@ public class MapMakerScript : MonoBehaviour
             Color col = hexScript.spriteRenderer.color;
 
             if (col == Color.white) levelcodeBit = '1';
-            else if (col == MapMakerScript.green)  levelcodeBit = '2';
-            else if (col == MapMakerScript.blue) 
+            else if (col == green)  levelcodeBit = '2';
+            else if (col == blue) 
             {
                 levelcodeBit = !hexScript.ccfalling ? '3' : '4';
             }
-            else if (col == MapMakerScript.purple) levelcodeBit = '5';
-            else if (col == MapMakerScript.yellow)
+            else if (col == purple) levelcodeBit = '5';
+            else if (col == yellow)
             {
                 levelcodeBit = hexScript.thisHexIsOn ? '6' : '7';
             }
-            else if (col == MapMakerScript.orange) levelcodeBit = '8';
-            else if (col == MapMakerScript.red)    levelcodeBit = '9';
+            else if (col == orange) levelcodeBit = '8';
+            else if (col == red)    levelcodeBit = '9';
 
             levelcode[hexToLevelcodeIndex[hex.Key]] = levelcodeBit;
         }
@@ -259,38 +299,25 @@ public class MapMakerScript : MonoBehaviour
 
         if (thereIsAPlayer)
         {
-            int playerXCoord = ToReadablePosition(PlayerScript.Instance.transform.position.x, "x");
-            int playerYCoord = ToReadablePosition(PlayerScript.Instance.transform.position.y, "y");
-            levelcode[playerSpawnIndex] = (char)(playerXCoord + '0');
-            levelcode[playerSpawnIndex + 1] = (char)(Mathf.Floor(playerYCoord / 10) + '0');
-            levelcode[playerSpawnIndex + 2] = (char)(playerYCoord % 10 +'0');
+            (int x, int y) playerSimpleCoords = ToSimpleCoords(PlayerScript.Instance.transform.position);
+            levelcode[playerSpawnIndex] = (char)(playerSimpleCoords.x + '0');
+            levelcode[playerSpawnIndex + 1] = (char)(Mathf.Floor(playerSimpleCoords.y / 10) + '0');
+            levelcode[playerSpawnIndex + 2] = (char)(playerSimpleCoords.y % 10 +'0');
         }
 
         return levelcode.ToString();
     }
-
-
-    public int ToReadablePosition(float unityPos, string axis)
+    public (int x, int y) ToSimpleCoords(Vector3 worldPosition)
     {
-        if (axis.Equals("x"))
-        {
-            return (int)Mathf.Round(COMPLEXITY + (unityPos / xUnit));
-        }
-        else
-        { //y-axis
-            return (int)Mathf.Round((COMPLEXITY * 2) - (unityPos / yUnit));
-        }
+        Vector3 localPos = worldPosition - transform.position;
+        int x = (int)Mathf.Round(COMPLEXITY + (localPos.x / xUnit));
+        int y = (int)Mathf.Round((COMPLEXITY * 2) - (localPos.y / yUnit));
+        return (x,y);
     }
-
-    public float ToUnityPosition(int readablePos, string axis)
+    public Vector3 ToVector((int x, int y) simpleCoords)
     {
-        if (axis.Equals("x"))
-        {
-            return (readablePos - COMPLEXITY) * xUnit;
-        }
-        else
-        { //y-axis
-            return (COMPLEXITY * 2 - readablePos) * yUnit;
-        }
+        float unityXPos = (simpleCoords.x - COMPLEXITY) * xUnit;
+        float unityYPos = (COMPLEXITY * 2 - simpleCoords.y) * yUnit;
+        return transform.position + new Vector3(unityXPos, unityYPos, 0);
     }
 }

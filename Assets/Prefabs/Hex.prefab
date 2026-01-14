@@ -50,7 +50,7 @@ PolygonCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 1
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
   thisHexIsOn: 1
+  levelcodeIndex: -1
   ccfalling: 0
 --- !u!1 &6123617536185845111
 GameObject:

@@ -19,8 +19,8 @@ Unity puzzle game
 Notes: 
 
 Conversions from coords to unity position:
-xPos = (x - mapComplexity) * xUnit; U<-R
-x = (mapComplexity + (xPos / xUnit)); R<-U
+xPos = (x - mapComplexity) * xUnit; U<-R (V<-S)
+x = (mapComplexity + (xPos / xUnit)); R<-U (S<-V)
 yPos = ((mapComplexity * 2) - y) * yUnit;
 y = (mapComplexity * 2) - (yPos / yUnit);
 

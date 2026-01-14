@@ -14,6 +14,7 @@ public class HexScript : MonoBehaviour
     public bool thisHexIsOn = true;
 
     public int levelcodeIndex = -1;
+    private bool isWorkspace;
     void Awake()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>(); 
@@ -30,7 +31,7 @@ public class HexScript : MonoBehaviour
 
         if (CheckIfPlayerOn())
         {
-            HexManagerScript.Instance.currHex = (MapMakerScript.Instance.ToReadablePosition(transform.position.x, "x"), MapMakerScript.Instance.ToReadablePosition(transform.position.y, "y"));
+            HexManagerScript.Instance.currHex = MapMakerScript.Instance.ToSimpleCoords(transform.position);
             HexManagerScript.Instance.currHexColor = spriteRenderer.color;
             Activate();
         }
@@ -39,16 +40,25 @@ public class HexScript : MonoBehaviour
 
     void Update()
     {
-
-        if (mouseIsOn)
+        isWorkspace = EditorManagerScript.Instance?.workspacePanel.activeInHierarchy ?? false; //Checks if in workspace editor
+        
+        if (!isWorkspace)
         {
-            hoverTime += Time.deltaTime * 2f;
-            float scaleModifier = 1.0714f + Mathf.Abs(Mathf.Sin(270 + hoverTime) / 14f);
-            transform.localScale = originalScale * scaleModifier;
+            gameObject.layer = LayerMask.NameToLayer("Default");
+            if (mouseIsOn)
+            {
+                hoverTime += Time.deltaTime * 2f;
+                float scaleModifier = 1.0714f + Mathf.Abs(Mathf.Sin(270 + hoverTime) / 14f);
+                transform.localScale = originalScale * scaleModifier;
+            }
+            if (ccfalling)
+            {
+                GetComponentInChildren<Animator>().Play("ShakeLess"); 
+            }
         }
-        if (ccfalling)
+        else
         {
-            GetComponentInChildren<Animator>().Play("ShakeLess"); 
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
 
     }
@@ -67,6 +77,7 @@ public class HexScript : MonoBehaviour
 
             mouseIsOn = true;
         }
+        
     }
     private void OnMouseExit()
     {
@@ -80,12 +91,20 @@ public class HexScript : MonoBehaviour
             
             mouseIsOn = false;
         }
+
+    }
+    public void OnMouseOver()
+    {
+    
     }
     public void OnMouseDown()
     {
+        if (isWorkspace)
+        {
+            return;
+        }
         if (CheckIfClickable()){
             MapMakerScript.Instance.undoStack.Push(MapMakerScript.Instance.Encode());
-            Debug.Log("PUSHING: " + MapMakerScript.Instance.Encode() + "Triggered By: " + System.Environment.StackTrace);
             transform.localScale = originalScale;
             mouseIsOn = false;
             hoverTime = 0f;
@@ -252,4 +271,5 @@ public class HexScript : MonoBehaviour
         }
         
     }
+
 }

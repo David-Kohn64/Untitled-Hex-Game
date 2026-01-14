@@ -8,10 +8,12 @@ public class PlayerScript : MonoBehaviour
 
     public int playerFacing = 0;
     [SerializeField] private Transform spriteTransform;
+    [SerializeField] private SpriteRenderer cachedSprite;
     private (int x, int y) nextHex;
     private void Awake()
     {
         Instance = this;
+        cachedSprite = GetComponentInChildren<SpriteRenderer>(true);
     }
     // Start is called before the first frame update
     void Start()
@@ -128,8 +130,16 @@ public class PlayerScript : MonoBehaviour
         GetComponentInChildren<Animator>().Play("Idle");
         //StopAllCoroutines();
 
-        Vector3 targetPos = new Vector3(MapMakerScript.Instance.ToUnityPosition(newXY.x, "x"), MapMakerScript.Instance.ToUnityPosition(newXY.y, "y"), transform.position.z);
+        Vector3 targetPos = MapMakerScript.Instance.ToVector(newXY);
         transform.position = targetPos;
+        //StartCoroutine(MoveSmooth(targetPos));
+    }
+    public void Move(Vector3 newXY)
+    {
+        GetComponentInChildren<Animator>().Play("Idle");
+        //StopAllCoroutines();
+
+        transform.position = newXY;
         //StartCoroutine(MoveSmooth(targetPos));
     }
     private IEnumerator MoveSmooth(Vector3 targetPos)
@@ -147,6 +157,19 @@ public class PlayerScript : MonoBehaviour
         transform.position = new Vector3(-20, 0, transform.position.z); //Go far away instead of destroying
         Debug.Log("FELL");
     }
-    
+    public void Hide(bool hide)
+    {
+        cachedSprite.enabled = !hide;
+        if (hide)
+        {
+            gameObject.layer = LayerMask.NameToLayer("Default");
+        }
+        else
+        {
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+        
+
+    }
 
 }

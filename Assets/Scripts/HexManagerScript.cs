@@ -170,9 +170,9 @@ public class HexManagerScript : MonoBehaviour
             HexScript hexScript = hex.GetComponent<HexScript>();
             hexScript.ccfalling = true;
         }
-        if (spriteRenderer.color == MapMakerScript.yellow || spriteRenderer.color == MapMakerScript.pink)
+        if (spriteRenderer.color == MapMakerScript.yellow)
         {
-            MapMakerScript.Instance.CreateHexOff(hex.transform.position.x, hex.transform.position.y, spriteRenderer.color);
+            MapMakerScript.Instance.CreateHexOff(hex.transform.position, spriteRenderer.color);
         }
     }
     public bool growthOn = false;
@@ -192,7 +192,7 @@ public class HexManagerScript : MonoBehaviour
     {
         if (growthOn == true) { return; }
 
-        (int x, int y) curr = (MapMakerScript.Instance.ToReadablePosition(hex.transform.position.x, "x"), MapMakerScript.Instance.ToReadablePosition(hex.transform.position.y, "y"));
+        (int x, int y) curr = MapMakerScript.Instance.ToSimpleCoords(hex.transform.position);
 
         Grow((curr.x, curr.y - 2));
         Grow((curr.x, curr.y + 2));
@@ -208,7 +208,7 @@ public class HexManagerScript : MonoBehaviour
         {
             if (CheckInBounds(curr))
             {
-                nextCurr = MapMakerScript.Instance.CreateNewHex(curr, MapMakerScript.red);
+                nextCurr = MapMakerScript.Instance.CreateNewHex(MapMakerScript.Instance.ToVector(curr), MapMakerScript.red);
                 growthHexes.Add(curr, nextCurr);
                 GrowthHandler(nextCurr);
             }

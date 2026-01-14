@@ -6,6 +6,7 @@ public class LevelData : MonoBehaviour
 {
     public static LevelData Instance { get; private set; }
     public string[] levelcodes;
+    public string[] editorLevelcodes;
 
     void Awake()
     {
@@ -16,6 +17,7 @@ public class LevelData : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
 
         levelcodes = new string[]{
             levelcodeBuddingPath,    // Level 1
@@ -37,6 +39,24 @@ public class LevelData : MonoBehaviour
             levelcodeJellyDonut,     // Level 17
             levelcodeCulmination     // Level 18
         };
+
+        if (editorLevelcodes == null || editorLevelcodes.Length == 0)
+        {
+            editorLevelcodes = new string[]
+            {
+                editor0Levelcode,
+                editor1Levelcode,
+                editor2Levelcode,
+                editor3Levelcode,
+                editor4Levelcode,
+                editor5Levelcode,
+                editor6Levelcode,
+                editor7Levelcode,
+                editor8Levelcode,
+                editor9Levelcode,
+            };
+        }
+        
 
     }
     //Edit levelcode in inspector too (when changed here)
@@ -60,6 +80,18 @@ public class LevelData : MonoBehaviour
     public string levelcodeCulmination = "1116110060338850080100007772070002059003"; // Level 18
 
     public string levelcodeLevel21 = "0000000000000000000000000000000000000"; // Level 21
+
+    public string editor0Levelcode = "0000000000000000000000000000000000000000";
+    public string editor1Levelcode = "0000000000000000000000000000000000000000";
+    public string editor2Levelcode = "0000000000000000000000000000000000000000";
+    public string editor3Levelcode = "0000000000000000000000000000000000000000";
+    public string editor4Levelcode = "0000000000000000000000000000000000000000";
+    public string editor5Levelcode = "0000000000000000000000000000000000000000";
+    public string editor6Levelcode = "0000000000000000000000000000000000000000";
+    public string editor7Levelcode = "0000000000000000000000000000000000000000";
+    public string editor8Levelcode = "0000000000000000000000000000000000000000";
+    public string editor9Levelcode = "0000000000000000000000000000000000000000";
+
 
     //Bad Level 7
     public (int, int)[][] allColorArraysChainingCollapse;

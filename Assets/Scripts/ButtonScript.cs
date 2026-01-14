@@ -6,16 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class ButtonScript : MonoBehaviour
 {
-    public MainMenuScript mainMenuScript;
     private float zPos; 
     private bool mouseIsOn; 
     public float radius = 232f; 
     private float hoverTime = 0f;
     private Vector3 originalScale;
     private RectTransform rectTransform; 
-    public enum ButtonType { Embark, Levels, Infinite, Editor, Options, About, Exit, Level1, Level2, Level3, Level4, Level5, 
-        Level6, Level7, Level8, Level9, Level10, Level11, Level12, Level13, Level14, Level15, Level16,
-        Level17, Level18, Level19, Level20, Level21, NotAButton }
+    public enum ButtonType { Embark, Levels, Infinite, Editor, Options, About, Exit,  
+        Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9, Level10, Level11, Level12, Level13, 
+        Level14, Level15, Level16, Level17, Level18, Level19, Level20, Level21, EditorWhite, EditorGreen, EditorBlue, EditorPurple,
+        EditorYellowOn, EditorYellowOff, EditorOrange, EditorRed, SaveAndLeave, ToPlayspace, 
+        Editor1, Editor2, Editor3, Editor4, Editor5, Editor6, Editor7, Editor8, Editor9, NotAButton }
     public ButtonType buttonType;
 
     void Start()
@@ -84,7 +85,7 @@ public class ButtonScript : MonoBehaviour
         switch (buttonType)
         {
             case ButtonType.Embark:
-                mainMenuScript.PanEmbark();
+                MainMenuScript.Instance.PanEmbark();
                 break;
             case ButtonType.Levels:
                 SceneManager.LoadSceneAsync("LevelSelect");
@@ -94,100 +95,91 @@ public class ButtonScript : MonoBehaviour
                 MapMakerScript.Instance.SetLevel(20); };
                 break;
             case ButtonType.Editor:
-                //Level Editor
+                SceneManager.LoadSceneAsync("LevelEditor");
                 break;
             case ButtonType.Options:
-                mainMenuScript.PanOptions();
+                MainMenuScript.Instance.PanOptions();
                 break;
             case ButtonType.About:
-                mainMenuScript.PanAbout();
+                MainMenuScript.Instance.PanAbout();
                 break;
             case ButtonType.Exit:
                 Application.Quit();
                 break;
             case ButtonType.Level1:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(1); };
-                break;
             case ButtonType.Level2:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(2); };
-                break;
             case ButtonType.Level3:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(3); };
-                break;
             case ButtonType.Level4:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(4); };
-                break;
             case ButtonType.Level5:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(5); };
-                break;
             case ButtonType.Level6:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(6); };
-                break;
             case ButtonType.Level7:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(7); };
-                break;
             case ButtonType.Level8:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(8); };
-                break;
             case ButtonType.Level9:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(9); };
-                break;
             case ButtonType.Level10:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(10); };
-                break;
             case ButtonType.Level11:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(11); };
-                break;
             case ButtonType.Level12:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(12); };
-                break;
             case ButtonType.Level13:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(13); };
-                break;
             case ButtonType.Level14:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(14); };
-                break;
             case ButtonType.Level15:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(15); };
-                break;
             case ButtonType.Level16:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(16); };
-                break;
             case ButtonType.Level17:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(17); };
-                break;
             case ButtonType.Level18:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(18); };
-                break;
             case ButtonType.Level19:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(19); };
-                break;
             case ButtonType.Level20:
-                SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(20); };
-                break;
             case ButtonType.Level21:
+                string levelNumber = buttonType.ToString();
+                int.TryParse(levelNumber.Replace("Level", ""), out int levelNum);
                 SceneManager.LoadSceneAsync("HexScene").completed += (asyncOperation) =>{ 
-                MapMakerScript.Instance.SetLevel(21); };
+                MapMakerScript.Instance.SetLevel(levelNum); };
+                break;
+            case ButtonType.EditorWhite:
+                EditorManagerScript.Instance.color = Color.white;
+                break;
+            case ButtonType.EditorGreen:
+                EditorManagerScript.Instance.color = MapMakerScript.green;
+                break;
+            case ButtonType.EditorBlue:
+                EditorManagerScript.Instance.color = MapMakerScript.blue;
+                break;
+            case ButtonType.EditorPurple:
+                EditorManagerScript.Instance.color = MapMakerScript.purple;
+                break;
+            case ButtonType.EditorYellowOn:
+                EditorManagerScript.Instance.color = MapMakerScript.yellow;
+                EditorManagerScript.Instance.isYellowOff = false;
+                break;
+            case ButtonType.EditorYellowOff:
+                EditorManagerScript.Instance.color = MapMakerScript.yellow;
+                EditorManagerScript.Instance.isYellowOff = true;
+                break;
+            case ButtonType.EditorOrange:
+                EditorManagerScript.Instance.color = MapMakerScript.orange;
+                break;
+            case ButtonType.EditorRed:
+                EditorManagerScript.Instance.color = MapMakerScript.red;
+                break;
+            case ButtonType.SaveAndLeave: //Rework later
+                EditorManagerScript.Instance.SaveEditorState();
+                SceneManager.LoadSceneAsync("Main Menu");
+                break;
+            case ButtonType.ToPlayspace:
+                EditorManagerScript.Instance.makerMode = false;
+                EditorManagerScript.Instance.PlayLevel(); 
+                break;
+            case ButtonType.Editor1:
+            case ButtonType.Editor2:
+            case ButtonType.Editor3:
+            case ButtonType.Editor4:
+            case ButtonType.Editor5:
+            case ButtonType.Editor6:
+            case ButtonType.Editor7:
+            case ButtonType.Editor8:
+            case ButtonType.Editor9:
+                string editorLevelNumber = buttonType.ToString();
+                int.TryParse(editorLevelNumber.Replace("Editor", ""), out int editorLevelNum);
+                EditorManagerScript.Instance.currEditorState = LevelData.Instance.editorLevelcodes[editorLevelNum - 1];
+                EditorManagerScript.Instance.makerMode = true;
+                EditorManagerScript.Instance.MakeLevel();
                 break;
             case ButtonType.NotAButton:
                 break;
@@ -195,8 +187,4 @@ public class ButtonScript : MonoBehaviour
                 break;
         }
     }
-    void ButtonDisappear(){
-
-    }
-    
 }

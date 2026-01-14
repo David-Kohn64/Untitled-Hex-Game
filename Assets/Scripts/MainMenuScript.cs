@@ -26,7 +26,10 @@ public class MainMenuScript : MonoBehaviour
     public GameObject panelsAbout;
     public GameObject panelsEmbark;
     public GameObject panelsOptions;
-
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         panelsAbout.SetActive(false);
